@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import LiabilitiesDashboard from './components/MainPage.vue';
 import CreateLiability from './components/CreateLiabilityPage.vue';
 import CreateCompletedStandard from './components/CreateCompletedStandardPage.vue';
+import ChartCompletedStandard from './components/ChartCompletedStandardPage.vue';
 import LoginPage from './components/LoginPage.vue';
 import SignUpPage from './components/SignUpPage.vue';
 
@@ -20,6 +21,11 @@ const routes = [
     path: '/create-completed-standard',
     name: 'CreateCompletedStandard',
     component: CreateCompletedStandard,
+  },
+  {
+    path: '/chart-completed-standard',
+    name: 'ChartCompletedStandard',
+    component: ChartCompletedStandard,
   },
   { path: '/login', component: LoginPage },
   { path: '/signup', component: SignUpPage },

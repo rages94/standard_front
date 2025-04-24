@@ -19,6 +19,13 @@
         >
           Списать долг
         </b-button>
+        <b-button
+          variant="primary"
+          class="mb-5 button-styled"
+          @click="goToChartCompletedStandard"
+        >
+          График beta
+        </b-button>
       <b-button variant="outline-danger" size="sm" class="logout-button" @click="logOut">
         Выйти
       </b-button>
@@ -55,6 +62,9 @@ export default {
     // Navigate to Create Completed Standard page
     goToCreateCompletedStandard() {
       this.$router.push('/create-completed-standard');
+    },
+    goToChartCompletedStandard() {
+      this.$router.push('/chart-completed-standard');
     },
     // Log out the user
     logOut() {
