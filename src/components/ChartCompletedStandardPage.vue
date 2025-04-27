@@ -70,11 +70,7 @@
           scales: {
             x: {
               type: 'time',
-              time: {unit: 'day'},
-              title: {
-                display: true,
-                text: 'Дата'
-              }
+              time: {unit: 'month'},
             },
             y: {
               title: {

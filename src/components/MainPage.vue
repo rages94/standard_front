@@ -4,6 +4,11 @@
       <div class="header">
         <h2 title="Столько норм ты должен этому миру">{{ totalLiability }}</h2> 
       </div>
+      <div>
+        <h3 v-if="credits > 0">Долг в этом месяце: {{ credits }}</h3> 
+        <h3 v-if="credits <= 0" class="no-credits">Долг за месяц списан</h3> 
+        <br>
+      </div>
       <div class="buttons">
         <b-button
           variant="primary"
@@ -49,7 +54,9 @@ export default {
     async fetchUserInfo() {
       try {
         const response = await api.get('/users/me/');
+        const response_credit = await api.get('/credits/');
         this.totalLiability = response.data.total_liabilities; 
+        this.credits = response_credit.data.count - response_credit.data.completed_count; 
         localStorage.setItem('completed_type', response.data.completed_type);
       } catch (error) {
         console.error('Error fetching total liability:', error);
@@ -110,6 +117,13 @@ export default {
   font-size: 2.5rem;
   font-weight: bold;
   color: #000000;
+  margin-bottom: 10px;
+}
+
+.no-credits {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00db00;
   margin-bottom: 10px;
 }
 
