@@ -4,7 +4,7 @@
       <div class="header">
         <h2 title="Столько норм ты должен этому миру">{{ totalLiability }}</h2> 
       </div>
-      <div>
+      <div v-if="credits">
         <h3 v-if="credits > 0">Долг в этом месяце: {{ credits }}</h3> 
         <h3 v-if="credits <= 0" class="no-credits">Долг за месяц списан</h3> 
         <br>
@@ -47,6 +47,7 @@ export default {
   data() {
     return {
       totalLiability: "...", // Default value
+      credits: null,
     };
   },
   methods: {
@@ -54,9 +55,13 @@ export default {
     async fetchUserInfo() {
       try {
         const response = await api.get('/users/me/');
-        const response_credit = await api.get('/credits/');
         this.totalLiability = response.data.total_liabilities; 
-        this.credits = response_credit.data.count - response_credit.data.completed_count; 
+        try {
+          const response_credit = await api.get('/credits/');
+          this.credits = response_credit.data.count - response_credit.data.completed_count; 
+        }  catch (error) {
+          this.credits = null
+        }
         localStorage.setItem('completed_type', response.data.completed_type);
       } catch (error) {
         console.error('Error fetching total liability:', error);
