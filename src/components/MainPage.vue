@@ -36,7 +36,7 @@
           class="mb-5 button-styled"
           @click="goToRatingCompletedStandard"
         >
-          Рейтинг beta
+          Рейтинг
         </b-button>
         <b-button variant="outline-danger" size="sm" class="logout-button" @click="logOut">
           Выйти
