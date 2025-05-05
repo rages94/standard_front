@@ -9,7 +9,7 @@
             <b-col class="col-md-8">
               Тип упражнения
             </b-col>
-            <b-col class="col-md-3">
+            <b-col class="col-md-4">
               Период
             </b-col>
           </b-row>
@@ -29,7 +29,7 @@
                 </b-dropdown-item>
               </b-dropdown>
             </b-col>
-            <b-col class="col-md-3">
+            <b-col class="col-md-4">
               <b-form-input id="type-number" placeholder="Дни" type="number" min="0" v-model="periodDays" @input="fetchUserRating"></b-form-input>
             </b-col>
           </b-row>
