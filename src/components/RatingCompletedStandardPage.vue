@@ -6,15 +6,15 @@
         <div>
 
           <b-row class="my-1">
-            <b-col class="col flex-grow-7">
+            <b-col class="col flex-grow-8">
               Тип упражнения
             </b-col>
-            <b-col class="col flex-grow-3">
+            <b-col class="col flex-grow-2">
               Период
             </b-col>
           </b-row>
           <b-row class="my-1">
-            <b-col class="col flex-grow-7">
+            <b-col class="col flex-grow-8">
               <b-dropdown text="Выберите упражнение" split-variant="outline-primary" class="mb-3 button-styled" variant="primary">
                 <template #button-content>
                   {{ selectedStandardName || 'Выберите упражнение' }}
@@ -29,7 +29,7 @@
                 </b-dropdown-item>
               </b-dropdown>
             </b-col>
-            <b-col class="col flex-grow-3">
+            <b-col class="col flex-grow-2">
               <b-form-input id="type-number" placeholder="Дни" type="number" min="0" v-model="periodDays" @input="fetchUserRating"></b-form-input>
             </b-col>
           </b-row>
