@@ -137,4 +137,7 @@ export default {
   color: #ffffff;
 }
 
+.btn-block {
+    width: 100%;
+}
 </style>
