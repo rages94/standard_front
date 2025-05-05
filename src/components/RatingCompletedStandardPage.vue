@@ -134,7 +134,6 @@ export default {
 
 .button-styled {
   width: 100%;
-  max-width: 300px;
   color: #ffffff;
 }
 
