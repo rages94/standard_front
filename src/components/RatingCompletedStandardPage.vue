@@ -4,28 +4,43 @@
       <h2 class="text-center mb-5">Рейтинг упражнений</h2>
       <div class="actions mt-4">
         <div>
-          <b-dropdown text="Выберите стандарт" split-variant="outline-primary" class="mb-3 button-styled" variant="primary">
-            <template #button-content>
-              {{ selectedStandard.standard_name || 'Выберите стандарт' }}
-            </template>
 
-            <b-dropdown-item
-              v-for="(item, index) in userRatings"
-              :key="index"
-              @click="selectStandard(item)"
-            >
-              {{ item.standard_name }}
-            </b-dropdown-item>
-          </b-dropdown>
+          <b-row class="my-1">
+            <b-col sm="8">
+              Тип упражнения
+            </b-col>
+            <b-col sm="4">
+              Период
+            </b-col>
+          </b-row>
+          <b-row class="my-1">
+            <b-col sm="8">
+              <b-dropdown text="Выберите упражнение" split-variant="outline-primary" class="mb-3 button-styled" variant="primary">
+                <template #button-content>
+                  {{ selectedStandardName || 'Выберите упражнение' }}
+                </template>
+
+                <b-dropdown-item
+                  v-for="(item, index) in standards"
+                  :key="index"
+                  @click="selectStandard(item.name)"
+                >
+                  {{ item.name }}
+                </b-dropdown-item>
+              </b-dropdown>
+            </b-col>
+            <b-col sm="4">
+              <b-form-input id="type-number" placeholder="Дни" type="number" min="0" v-model="periodDays" @input="fetchUserRating"></b-form-input>
+            </b-col>
+          </b-row>
+
           <!-- Таблица данных -->
-          <b-table :items="selectedStandard.user_ratings" :fields="fields" striped hover>
+          <b-table :items="selectedUserRatings" :fields="fields" striped hover>
             <template #cell(index)="data">
               {{ data.index + 1 }}
             </template>
             <template #cell(count)="data">
-              <b>{{
-                data.value
-              }}</b> <!-- Выводим значения в ячейке -->
+              <b>{{ data.value }}</b>
             </template>
           </b-table>
         </div>
@@ -47,6 +62,8 @@ export default {
   data() {
     return {
       userRatings: null,
+      standards: [],
+      periodDays: null,
       fields: [
           {
             key: 'index',
@@ -64,21 +81,43 @@ export default {
             sortable: true,
           }
         ],
-        selectedStandard: {},
+        selectedStandardName: null,
+        selectedUserRatings: {},
     };
   },
   methods: {
     async fetchUserRating() {
       try {
-        const response = await api.get('/completed_standards/rating/');
+        const response = await api.get(`/completed_standards/rating/?period_days=${this.periodDays | 0}`);
         this.userRatings = response.data; 
-        this.selectedStandard = this.userRatings[0];
+        this.selectStandard(this.selectedStandardName)
       } catch (error) {
         console.error('Error fetching user ratings:', error);
       }
     },
+    async fetchStandards() {
+      try {
+        const response = await api.get('/standards/');
+        this.standards = response.data;
+        this.selectedStandardName = this.standards[0].name
+      } catch (error) {
+        console.error('Error fetching standards:', error);
+      }
+    },
     selectStandard(item) {
-      this.selectedStandard = item;
+      this.selectedStandardName = item;
+      const rating = this.userRatings.find(item => item.standard_name == this.selectedStandardName)
+      if (rating === undefined) {
+        this.selectedUserRatings = [];
+      }
+      else 
+      {
+        this.selectedUserRatings = rating.user_ratings;
+      }
+    },
+    async fetchData() {
+      await this.fetchStandards();
+      this.fetchUserRating();
     },
 
     goBack() {
@@ -86,7 +125,7 @@ export default {
       },
   },
   mounted() {
-    this.fetchUserRating();
+    this.fetchData();
   },
 };
 </script>
