@@ -26,14 +26,21 @@
         </b-button>
         <b-button
           variant="primary"
-          class="mb-5 button-styled"
+          class="mb-3 button-styled"
           @click="goToChartCompletedStandard"
         >
           График beta
         </b-button>
-      <b-button variant="outline-danger" size="sm" class="logout-button" @click="logOut">
-        Выйти
-      </b-button>
+        <b-button
+          variant="primary"
+          class="mb-5 button-styled"
+          @click="goToRatingCompletedStandard"
+        >
+          Рейтинг beta
+        </b-button>
+        <b-button variant="outline-danger" size="sm" class="logout-button" @click="logOut">
+          Выйти
+        </b-button>
       </div>
     </div>
   </b-container>
@@ -77,6 +84,9 @@ export default {
     },
     goToChartCompletedStandard() {
       this.$router.push('/chart-completed-standard');
+    },
+    goToRatingCompletedStandard() {
+      this.$router.push('/rating-completed-standard');
     },
     // Log out the user
     logOut() {
