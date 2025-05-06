@@ -19,10 +19,17 @@
         </b-button>
         <b-button
           variant="primary"
-          class="mb-5 button-styled"
+          class="mb-3 button-styled"
           @click="goToCreateCompletedStandard"
         >
           Списать долг
+        </b-button>
+        <b-button
+          variant="primary"
+          class="mb-5 button-styled"
+          @click="goToHistoryStandard"
+        >
+          История
         </b-button>
         <b-button
           variant="primary"
@@ -74,13 +81,14 @@ export default {
         console.error('Error fetching total liability:', error);
       }
     },
-    // Navigate to Create Liability page
     goToCreateLiability() {
       this.$router.push('/create-liability');
     },
-    // Navigate to Create Completed Standard page
     goToCreateCompletedStandard() {
       this.$router.push('/create-completed-standard');
+    },
+    goToHistoryStandard() {
+      this.$router.push('/history');
     },
     goToChartCompletedStandard() {
       this.$router.push('/chart-completed-standard');

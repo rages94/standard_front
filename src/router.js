@@ -4,6 +4,7 @@ import CreateLiability from './components/CreateLiabilityPage.vue';
 import CreateCompletedStandard from './components/CreateCompletedStandardPage.vue';
 import ChartCompletedStandard from './components/ChartCompletedStandardPage.vue';
 import RatingCompletedStandard from './components/RatingCompletedStandardPage.vue';
+import HistoryStandard from './components/HistoryStandardPage.vue';
 import LoginPage from './components/LoginPage.vue';
 import SignUpPage from './components/SignUpPage.vue';
 
@@ -29,9 +30,14 @@ const routes = [
     component: ChartCompletedStandard,
   },
   {
-    path: '/Rating-completed-standard',
+    path: '/rating-completed-standard',
     name: 'RatingCompletedStandard',
     component: RatingCompletedStandard,
+  },
+  {
+    path: '/history',
+    name: 'HistoryStandard',
+    component: HistoryStandard,
   },
   { path: '/login', component: LoginPage },
   { path: '/signup', component: SignUpPage },
