@@ -104,6 +104,7 @@ export default {
       try {
         const response = await api.get('/standards/');
         this.standards = response.data;
+        this.standards.unshift({name: "Все упражнения"})
         this.selectedStandardName = this.standards[0].name
       } catch (error) {
         console.error('Error fetching standards:', error);
