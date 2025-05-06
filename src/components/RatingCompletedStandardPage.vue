@@ -79,6 +79,11 @@ export default {
             key: 'count',
             label: 'Количество',
             sortable: true,
+          },
+          {
+            key: 'standards',
+            label: 'Нормы',
+            sortable: true,
           }
         ],
         selectedStandardName: null,
