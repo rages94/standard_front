@@ -7,37 +7,6 @@
           <b-tab title="Списания" active>
             <div class="overflow-auto">
               <b-pagination
-                v-model="lCurrentPage"
-                :total-rows="lCount"
-                :per-page="lLimit"
-                align="center"
-                @page-click="onLPageClick()"
-              ></b-pagination>
-
-              <b-table
-                id="liabilities"
-                :items="liabilities"
-                :per-page="lLimit"
-                :current-page="lCurrentPage"
-                :fields="lFields"
-                small
-              >
-                <template #cell(liability_template_name)="data">
-                  {{ data.item.liability_template.name }}
-                </template>
-                <template #cell(standards)="data">
-                  {{ Math.floor(data.item.count * data.item.liability_template.count) }}
-                </template>
-                <template #cell(created_at)="data">
-                  {{ formatDate(data.item.created_at) }}
-                </template>
-              </b-table>
-            </div>
-          </b-tab>
-
-          <b-tab title="Долги">
-            <div class="overflow-auto">
-              <b-pagination
                 v-model="csCurrentPage"
                 :total-rows="csCount"
                 :per-page="csLimit"
@@ -58,6 +27,37 @@
                 </template>
                 <template #cell(standards)="data">
                   {{ Math.floor(data.item.count / data.item.standard.count) }}
+                </template>
+                <template #cell(created_at)="data">
+                  {{ formatDate(data.item.created_at) }}
+                </template>
+              </b-table>
+            </div>
+          </b-tab>
+
+          <b-tab title="Долги">
+            <div class="overflow-auto">
+              <b-pagination
+                v-model="lCurrentPage"
+                :total-rows="lCount"
+                :per-page="lLimit"
+                align="center"
+                @page-click="onLPageClick()"
+              ></b-pagination>
+
+              <b-table
+                id="liabilities"
+                :items="liabilities"
+                :per-page="lLimit"
+                :current-page="lCurrentPage"
+                :fields="lFields"
+                small
+              >
+                <template #cell(liability_template_name)="data">
+                  {{ data.item.liability_template.name }}
+                </template>
+                <template #cell(standards)="data">
+                  {{ Math.floor(data.item.count * data.item.liability_template.count) }}
                 </template>
                 <template #cell(created_at)="data">
                   {{ formatDate(data.item.created_at) }}
@@ -88,16 +88,16 @@ export default {
       csCurrentPage: 1,
       csFields: [
         {
+          key: 'standard_name',
+          label: 'Упражнение',
+        },
+        {
           key: 'count',
           label: 'Количество',
         },
         {
           key: 'standards',
           label: 'Нормы',
-        },
-        {
-          key: 'standard_name',
-          label: 'Упражнение',
         },
         {
           key: 'created_at',
@@ -111,16 +111,16 @@ export default {
       lCurrentPage: 1,
       lFields: [
         {
+          key: 'liability_template_name',
+          label: 'Долг',
+        },
+        {
           key: 'count',
           label: 'Количество',
         },
         {
           key: 'standards',
           label: 'Нормы',
-        },
-        {
-          key: 'liability_template_name',
-          label: 'Долг',
         },
         {
           key: 'created_at',
@@ -187,7 +187,7 @@ export default {
 }
 
 .main-box {
-    width: 600px;
+    width: 450px;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
