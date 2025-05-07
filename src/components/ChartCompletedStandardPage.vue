@@ -1,6 +1,6 @@
 <template>
     <b-container class="create-completed-standard-page">
-      <h1 class="text-center mb-5">Такой себе график</h1>
+      <h2 class="text-center mb-5">График списаний</h2>
       <div>
         <LineChart :data="chartData" :options="chartOptions" />
       </div>
@@ -17,12 +17,12 @@
 
     import { TimeScale } from 'chart.js';
     import { Line } from 'vue-chartjs';
-    import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement } from 'chart.js';
+    import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, Filler } from 'chart.js';
     import 'chartjs-adapter-dayjs-4/dist/chartjs-adapter-dayjs-4.esm';
     import autocolors from 'chartjs-plugin-autocolors';
     import zoomPlugin from 'chartjs-plugin-zoom';
 
-    ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, TimeScale, autocolors, zoomPlugin);
+    ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement, TimeScale, autocolors, zoomPlugin, Filler);
 
   export default {
     name: "ChartCompletedStandardPage",
@@ -31,6 +31,7 @@
     },
     data() {
       return {
+        as_standard: true,
         chartData: {
           labels: [], // Даты (по оси X)
           datasets: [{
@@ -48,22 +49,22 @@
               enabled: true,
             },
             zoom: {
-              pan: {
-                enabled: true,          // Включаем панорамирование
-                mode: 'xy',             // Можно панорамировать по осям X и Y
-                speed: 10               // Скорость панорамирования
-              },
               zoom: {
-                enabled: true,          // Включаем масштабирование
-                mode: 'xy',             // Масштабирование по осям X и Y
-                speed: 0.1,             // Скорость масштабирования
-                sensitivity: 3,         // Чувствительность к движению мыши
-                threshold: 2            // Минимальное количество пикселей для начала масштабирования
+                wheel: {
+                  enabled: true,
+                  speed: 0.2,
+                },
+                pinch: {
+                  enabled: true,
+                },
+                mode: 'xy',
+                scaleMode: 'xy',
               },
-              // limits: {
-              //   y: {min: 0, max: 200},
-              //   y2: {min: -5, max: 5}
-              // },
+              pan: {
+                enabled: true,
+                mode: 'xy',
+                scaleMode: 'xy',
+              }
             }
           },
           responsive: true,
@@ -75,7 +76,7 @@
             y: {
               title: {
                 display: true,
-                text: 'Количество'
+                text: 'Нормы'
               }
             }
           },
@@ -86,17 +87,25 @@
     methods: {
       async fetchCompletedStandards() {
         try {
-          const chartResponse = await api.get("/completed_standards/grouped/"); 
+          const chartResponse = await api.get(`/completed_standards/grouped/?as_standard=${this.as_standard}`); 
           const chartData = chartResponse.data; 
 
           // Обновляем данные для графика
           this.chartData = chartData
+          if (this.as_standard == false)
+          {
+            this.chartOptions.scales.y.text = 'Количество'
+          }
+          else
+          {
+            this.chartOptions.scales.y.text = 'Нормы'
+          }
 
         } catch (error) {
           console.error("Ошибка при загрузке данных:", error);
         }
       },
-      // Navigate back to MainPage
+
       goBack() {
         this.$router.push('/');
       },

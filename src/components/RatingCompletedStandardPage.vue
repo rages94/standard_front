@@ -39,9 +39,6 @@
             <template #cell(index)="data">
               {{ data.index + 1 }}
             </template>
-            <template #cell(count)="data">
-              <b>{{ data.value }}</b>
-            </template>
           </b-table>
         </div>
 
