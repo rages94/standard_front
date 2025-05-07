@@ -5,114 +5,93 @@
         <h2 title="Столько норм ты должен этому миру">{{ totalLiability }}</h2> 
       </div>
       <div v-if="credits">
-        <h3 v-if="credits > 0">Долг в этом месяце: {{ credits }}</h3> 
-        <h3 v-if="credits <= 0" class="no-credits">Долг за месяц списан</h3> 
+        <h3 class="mb-3" v-if="credits > 0">Долг в этом месяце: {{ credits }}</h3> 
+        <h3 v-if="credits <= 0" class="mb-3 no-credits">Долг за месяц списан</h3> 
         <br>
       </div>
       <div class="buttons">
-        <b-button
-          variant="primary"
-          class="mb-3 button-styled"
-          @click="goToCreateLiability"
-        >
-          Записать долг
-        </b-button>
-        <b-button
-          variant="primary"
-          class="mb-3 button-styled"
-          @click="goToCreateCompletedStandard"
-        >
-          Списать долг
-        </b-button>
-        <b-button
-          variant="primary"
-          class="mb-5 button-styled"
-          @click="goToHistoryStandard"
-        >
-          История
-        </b-button>
-        <b-button
-          variant="primary"
-          class="mb-3 button-styled"
-          @click="goToChartCompletedStandard"
-        >
-          График beta
-        </b-button>
-        <b-button
-          variant="primary"
-          class="mb-5 button-styled"
-          @click="goToRatingCompletedStandard"
-        >
-          Рейтинг
-        </b-button>
-        <b-button variant="outline-danger" size="sm" class="logout-button" @click="logOut">
-          Выйти
-        </b-button>
+        <b-row v-for="btn in buttons" class="mb-3 button-styled">
+          <b-button 
+            :variant="btn.variant"
+            class="button-styled"
+            @click="btn.action"
+          >
+          {{ btn.label }}
+          </b-button>
+        </b-row>
+
+        <b-row class="mt-5">
+          <b-col class="text-center">
+            <b-button variant="link" class="text-danger fs-6" @click="logOut">
+              Выйти
+            </b-button>
+          </b-col>
+        </b-row>
       </div>
     </div>
   </b-container>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import api from '../api/axios.js';
 
-export default {
-  name: 'MainPage',
-  data() {
-    return {
-      totalLiability: "...", // Default value
-      credits: null,
-    };
+const router = useRouter();
+const totalLiability = ref(0);
+const credits = ref(0);
+const loading = ref(true);
+
+const buttons = [
+  {
+    label: 'Добавить долг',
+    action: () => router.push('/create-liability'),
+    variant: 'primary',
   },
-  methods: {
-    // Fetch the total liability from the API
-    async fetchUserInfo() {
-      try {
-        const response = await api.get('/users/me/');
-        this.totalLiability = response.data.total_liabilities; 
-        try {
-          const response_credit = await api.get('/credits/');
-          this.credits = response_credit.data.count - response_credit.data.completed_count; 
-        }  catch (error) {
-          this.credits = null
-        }
-        localStorage.setItem('completed_type', response.data.completed_type);
-      } catch (error) {
-        console.error('Error fetching total liability:', error);
-      }
-    },
-    goToCreateLiability() {
-      this.$router.push('/create-liability');
-    },
-    goToCreateCompletedStandard() {
-      this.$router.push('/create-completed-standard');
-    },
-    goToHistoryStandard() {
-      this.$router.push('/history');
-    },
-    goToChartCompletedStandard() {
-      this.$router.push('/chart-completed-standard');
-    },
-    goToRatingCompletedStandard() {
-      this.$router.push('/rating-completed-standard');
-    },
-    // Log out the user
-    logOut() {
-      try {
-        // Clear tokens from localStorage
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        // Redirect to LoginPage
-        this.$router.push('/login');
-      } catch (error) {
-        console.error('Error during logout:', error);
-      }
-    },
+  {
+    label: 'Списать долг',
+    action: () => router.push('/create-completed-standard'),
+    variant: 'primary',
   },
-  mounted() {
-    this.fetchUserInfo();
+  {
+    label: 'История',
+    action: () => router.push('/history'),
+    variant: 'primary',
   },
-};
+  {
+    label: 'График',
+    action: () => router.push('/chart-completed-standard'),
+    variant: 'primary',
+  },
+  {
+    label: 'Рейтинг',
+    action: () => router.push('/rating-completed-standard'),
+    variant: 'primary',
+  },
+];
+
+async function fetchUserInfo() {
+  loading.value = true;
+  try {
+    const userRes = await api.get('/users/me/');
+    totalLiability.value = userRes.data.total_liabilities;
+
+    const creditRes = await api.get('/credits/');
+    credits.value = creditRes.data.count - creditRes.data.completed_count;
+  } catch (error) {
+    console.error('Ошибка при загрузке данных:', error);
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(fetchUserInfo);
+
+function logOut() {
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('refresh_token');
+  router.push('/login');
+}
 </script>
 
 <style scoped>
