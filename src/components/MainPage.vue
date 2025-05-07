@@ -2,13 +2,17 @@
   <b-container class="main-page d-flex flex-column align-items-center justify-content-center">
     <div class="main-box">
       <div class="header">
-        <h2 title="Столько норм ты должен этому миру">{{ totalLiability }}</h2> 
+        <b-tooltip target="liability-value" title="Столько норм ты должен этому миру">
+          <h2 v-if="!loading">{{ totalLiability }}</h2> 
+          <b-skeleton v-else type="text" class="skeleton-heading mb-5" width="100%"></b-skeleton>
+        </b-tooltip>
       </div>
       <div v-if="credits">
         <h3 class="mb-3" v-if="credits > 0">Долг в этом месяце: {{ credits }}</h3> 
         <h3 v-if="credits <= 0" class="mb-3 no-credits">Долг за месяц списан</h3> 
         <br>
       </div>
+      <b-skeleton v-else type="text" class="mb-5" width="100%"></b-skeleton>
       <div class="buttons">
         <b-row v-for="btn in buttons" class="mb-3 button-styled">
           <b-button 
@@ -168,6 +172,10 @@ function logOut() {
 .logout-button:hover {
   background-color: #dc3545;
   color: white;
+}
+
+.skeleton-heading {
+  height: 78px; /* соответствует h1 */
 }
 
 </style>
