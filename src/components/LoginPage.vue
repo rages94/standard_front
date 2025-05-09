@@ -26,13 +26,14 @@
           </b-form-group>
   
           <!-- Login Button -->
-          <b-button type="submit" variant="primary" class="login-button">
+          <b-button type="submit" size="sm" variant="primary" class="login-button">
             Войти
           </b-button>
   
           <!-- Sign Up Button -->
           <b-button
             variant="secondary"
+            size="sm"
             class="signup-button mt-2"
             @click="navigateToSignUp"
           >

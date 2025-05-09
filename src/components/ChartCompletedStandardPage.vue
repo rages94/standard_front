@@ -5,7 +5,7 @@
         <LineChart :data="chartData" :options="chartOptions" />
       </div>
       <div class="actions mt-4">
-        <b-button variant="secondary" class="btn-block" @click="goBack">
+        <b-button variant="secondary" size="sm" class="btn-block" @click="goBack">
           Назад
         </b-button>
       </div>

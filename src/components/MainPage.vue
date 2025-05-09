@@ -2,7 +2,7 @@
   <b-container class="main-page d-flex flex-column align-items-center justify-content-center">
     <div class="main-box">
       <div class="header">
-        <b-tooltip target="liability-value" title="Столько норм ты должен этому миру">
+        <b-tooltip target="liability-value" text-align="center" title="Столько норм ты должен этому миру">
           <h2 v-if="!loading">{{ totalLiability }}</h2> 
           <b-skeleton v-else type="text" class="skeleton-heading mb-5" width="100%"></b-skeleton>
         </b-tooltip>
@@ -48,7 +48,7 @@ const loading = ref(true);
 
 const buttons = [
   {
-    label: 'Добавить долг',
+    label: 'Записать долг',
     action: () => router.push('/create-liability'),
     variant: 'primary',
   },
@@ -175,7 +175,7 @@ function logOut() {
 }
 
 .skeleton-heading {
-  height: 78px; /* соответствует h1 */
+  height: 78px;
 }
 
 </style>

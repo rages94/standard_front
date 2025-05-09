@@ -43,7 +43,7 @@
         </div>
 
         <br>
-        <b-button variant="secondary" class="btn-block" @click="goBack">
+        <b-button variant="secondary" size="sm" class="btn-block" @click="goBack">
           Назад
         </b-button>
       </div>

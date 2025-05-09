@@ -37,12 +37,13 @@
           </b-form-group>
   
           <!-- Sign Up Button -->
-          <b-button type="submit" variant="primary" class="signup-button">
+          <b-button type="submit" size="sm" variant="primary" class="signup-button">
             Зарегистрироваться
           </b-button>
 
           <b-button
             variant="secondary"
+            size="sm"
             class="back-button mt-2"
             @click="navigateToLogin"
           >
