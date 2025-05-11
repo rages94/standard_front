@@ -50,7 +50,7 @@
         <b-form-input v-model="newTemplateName" />
       </b-form-group>
       <b-form-group label="Количество норм">
-        <b-form-input type="number" min="0" v-model="newCount" />
+        <b-form-input type="number" min="1" v-model="newCount" />
       </b-form-group>
       <template #footer>
         <b-button variant="secondary" size="sm" @click="showModal = false">Отмена</b-button>
@@ -81,7 +81,7 @@ export default {
       isLoading: false,
       showModal: false,
       newTemplateName: '',
-      newCount: 0,
+      newCount: 1,
       showDeleteConfirm: false,
       templateToDelete: null,
     };
@@ -122,7 +122,7 @@ export default {
         const res = await api.post('/liability_templates/', { name: this.newTemplateName, count: this.newCount });
         this.liabilityTemplates.push({ ...res.data, inputValue: 0 });
         this.newTemplateName = '';
-        this.newCount = 0;
+        this.newCount = 1;
         this.showModal = false;
       } catch (err) {
         console.error('Ошибка при создании шаблона', err);
@@ -131,7 +131,7 @@ export default {
     async deleteTemplate() {
       if (!this.templateToDelete) return;
       try {
-        await api.delete(`/liability_templates/${this.templateToDelete.id}/`);
+        await api.delete(`/liability_templates/${this.templateToDelete.id}`);
         this.liabilityTemplates = this.liabilityTemplates.filter(t => t.id !== this.templateToDelete.id);
         this.templateToDelete = null;
         this.showDeleteConfirm = false;

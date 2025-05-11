@@ -54,10 +54,20 @@
                 small
               >
                 <template #cell(liability_template_name)="data">
-                  {{ data.item.liability_template.name }}
+                  <span v-if="data.item.liability_template === null">
+                    Пользовательское
+                  </span>
+                  <span v-else>
+                    {{ data.item.liability_template.name }}
+                  </span>
                 </template>
                 <template #cell(standards)="data">
-                  {{ Math.floor(data.item.count * data.item.liability_template.count) }}
+                  <span v-if="data.item.liability_template === null">
+                    {{ data.item.count }}
+                  </span>
+                  <span v-else>
+                    {{ Math.floor(data.item.count * data.item.liability_template.count) }}
+                  </span>
                 </template>
                 <template #cell(created_at)="data">
                   {{ formatDate(data.item.created_at) }}
@@ -65,6 +75,46 @@
               </b-table>
             </div>
           </b-tab>
+
+          <b-tab title="Зачеты">
+            <div class="overflow-auto">
+              <b-pagination
+                v-model="cCurrentPage"
+                :total-rows="cCount"
+                :per-page="cLimit"
+                align="center"
+                @page-click="onCPageClick()"
+              ></b-pagination>
+
+              <b-table
+                id="credits"
+                :items="credits"
+                :per-page="cLimit"
+                :current-page="cCurrentPage"
+                :fields="cFields"
+                small
+              >
+                <template #cell(completed)="data">
+                  <span v-if="data.item.completed === true" class="text-success">
+                    <i class="fa fa-check" title="Выполнено"></i>
+                  </span>
+                  <span v-else-if="data.item.completed === false" class="text-danger">
+                    <i class="fa fa-times" title="Зафаршмачено"></i>
+                  </span>
+                  <span v-else class="text-warning">
+                    <i class="fa fa-hourglass-half" title="В процессе"></i>
+                  </span>
+                </template>
+                <template #cell(period)="data">
+                  {{ formatDate(data.item.created_at) }} - {{ formatDate(data.item.deadline_date) }}
+                </template>
+                <template #cell(completed_at)="data">
+                  {{ data.item.completed === true ? formatDate(data.item.completed_at) : '-' }}
+                </template>
+              </b-table>
+            </div>
+          </b-tab>
+
         </b-tabs>
         <br>
         <b-button variant="secondary" size="sm" class="btn-block" @click="goBack">
@@ -127,6 +177,33 @@ export default {
           label: 'Дата',
         },
       ],
+
+      credits: [],
+      cCount: 0,
+      cLimit: 10,
+      cCurrentPage: 1,
+      cFields: [
+      {
+          key: 'completed',
+          label: '',
+        },
+        {
+          key: 'count',
+          label: 'Всего норм',
+        },
+        {
+          key: 'completed_count',
+          label: 'Выполнено норм',
+        },
+        {
+          key: 'period',
+          label: 'Период',
+        },
+        {
+          key: 'completed_at',
+          label: 'Дата выполнения',
+        },
+      ],
     };
   },
   setup() {
@@ -156,6 +233,15 @@ export default {
         console.error('Error fetching liabilities:', error);
       }
     },
+    async fetchCredits() {
+      try {
+        const response = await api.get(`/credits/?limit=${this.cLimit}&offset=${(this.cCurrentPage - 1) * this.cLimit}`);
+        this.credits = response.data.data;
+        this.cCount = response.data.count
+      } catch (error) {
+        console.error('Error fetching credits:', error);
+      }
+    },
     onCSPageClick() {
       this.$nextTick(() => {
         this.fetchCompletedStandards();
@@ -166,6 +252,11 @@ export default {
         this.fetchLiabilities();
       });
     },
+    onCPageClick() {
+      this.$nextTick(() => {
+        this.fetchCredits();
+      });
+    },
 
     goBack() {
         this.$router.push('/');
@@ -174,6 +265,7 @@ export default {
   mounted() {
     this.fetchCompletedStandards();
     this.fetchLiabilities();
+    this.fetchCredits();
   },
 };
 </script>

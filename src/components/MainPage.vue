@@ -2,17 +2,22 @@
   <b-container class="main-page d-flex flex-column align-items-center justify-content-center">
     <div class="main-box">
       <div class="header">
-        <b-tooltip target="liability-value" text-align="center" title="Столько норм ты должен этому миру">
-          <h2 v-if="!loading">{{ totalLiability }}</h2> 
-          <b-skeleton v-else type="text" class="skeleton-heading mb-5" width="100%"></b-skeleton>
-        </b-tooltip>
+        <h2
+          id="liability-value"
+          v-if="!loading"
+          v-b-tooltip.hover.top="'Столько норм ты должен этому миру'"
+          class="mb-5"
+        >
+          {{ totalLiability }}
+        </h2>
+        <b-skeleton v-else type="text" class="skeleton-heading mb-5 mx-auto" width="30%"></b-skeleton>
       </div>
       <div v-if="credits">
         <h3 class="mb-3" v-if="credits > 0">Долг в этом месяце: {{ credits }}</h3> 
         <h3 v-if="credits <= 0" class="mb-3 no-credits">Долг за месяц списан</h3> 
         <br>
       </div>
-      <b-skeleton v-else type="text" class="mb-5" width="100%"></b-skeleton>
+      <b-skeleton v-else type="text" class="mb-5 mx-auto" width="90%"></b-skeleton>
       <div class="buttons">
         <b-row v-for="btn in buttons" class="mb-3 button-styled">
           <b-button 
@@ -80,7 +85,7 @@ async function fetchUserInfo() {
     const userRes = await api.get('/users/me/');
     totalLiability.value = userRes.data.total_liabilities;
 
-    const creditRes = await api.get('/credits/');
+    const creditRes = await api.get('/credits/current/');
     credits.value = creditRes.data.count - creditRes.data.completed_count;
   } catch (error) {
     console.error('Ошибка при загрузке данных:', error);
@@ -175,7 +180,7 @@ function logOut() {
 }
 
 .skeleton-heading {
-  height: 78px;
+  height: 86px;
 }
 
 </style>
