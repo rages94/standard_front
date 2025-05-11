@@ -13,8 +13,9 @@
         <b-skeleton v-else type="text" class="skeleton-heading mb-5 mx-auto" width="45%"></b-skeleton>
       </div>
       <div v-if="credits">
-        <h3 class="mb-3" v-if="credits > 0">Долг в этом месяце: {{ credits }}</h3> 
-        <h3 v-if="credits <= 0" class="mb-3 no-credits">Долг за месяц списан</h3> 
+        <h3 class="mb-3" v-if="credits > 0">Долг в этом месяце: {{ credits }}</h3>
+        <h3 v-if="credits <= 0" class="mb-3 no-credits">Долг за месяц списан</h3>
+        <h3 v-if="credits === null" class="mb-3">Нет активного зачета</h3>
         <br>
       </div>
       <b-skeleton v-else type="text" class="mb-5 mx-auto" width="90%"></b-skeleton>
