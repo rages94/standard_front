@@ -39,6 +39,15 @@
             <template #cell(index)="data">
               {{ data.index + 1 }}
             </template>
+            <template #cell(standards)="data">
+              <span 
+                v-if="selectedStandardName === 'Все упражнения'" 
+                v-b-tooltip.hover.top="completedStandardInfo[data.item.username]"
+              >
+                {{ data.item.standards }}
+              </span>
+              <span v-else>{{ data.item.standards }}</span>
+            </template>
           </b-table>
         </div>
 
@@ -85,14 +94,38 @@ export default {
         ],
         selectedStandardName: null,
         selectedUserRatings: {},
+        completedStandardInfo: {},
     };
   },
   methods: {
+    setCompletedStandardInfo() {
+      const result = {};
+      this.userRatings.forEach(item => {
+        item.user_ratings.forEach(rating => {
+          const username = rating.username;
+          const standardName = item.standard_name;
+          const standards = rating.standards;
+          if (standardName === "Все упражнения") {
+            return;
+          }
+          if (!result[username]) {
+            result[username] = "";
+          }
+          result[username] += `${standardName}: ${standards}<br>`;
+        });
+      });
+
+      for (const username in result) {
+        result[username] = result[username].trim();
+      }
+      this.completedStandardInfo = result;
+    },
     async fetchUserRating() {
       try {
         const response = await api.get(`/completed_standards/rating/?period_days=${this.periodDays | 0}`);
         this.userRatings = response.data; 
         this.selectStandard(this.selectedStandardName)
+        this.setCompletedStandardInfo()
       } catch (error) {
         console.error('Error fetching user ratings:', error);
       }
