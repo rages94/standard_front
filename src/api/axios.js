@@ -1,6 +1,7 @@
 // src/api/axios.js
 
 import axios from 'axios';
+import { useAuthStore } from '@/stores/auth';
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
 // Create an Axios instance
@@ -25,8 +26,9 @@ api.interceptors.request.use(
 
 // Axios response interceptor to handle token expiry
 api.interceptors.response.use(
-  (response) => response,  // Pass through successful responses
+  (response) => response,
   async (error) => {
+    const auth = useAuthStore();
     const originalRequest = error.config;
 
     // Check if the error is due to token expiry (401)
@@ -44,17 +46,13 @@ api.interceptors.response.use(
 
         const { access_token, refresh_token } = refreshResponse.data;
 
-        // Store the new tokens
-        localStorage.setItem('access_token', access_token);
-        localStorage.setItem('refresh_token', refresh_token);
+        auth.login(access_token, refresh_token);
 
         // Retry the original request with the new access token
         originalRequest.headers['Authorization'] = `Bearer ${access_token}`;
         return axios(originalRequest);
       } catch (refreshError) {
-        // Handle refresh token failure (redirect to login, clear tokens)
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
+        auth.logout();
         window.location.href = '/login';  // Redirect to login page
         return Promise.reject(refreshError);
       }

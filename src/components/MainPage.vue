@@ -46,11 +46,13 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '../api/axios.js';
+import { useAuthStore } from '@/stores/auth';
 
 const router = useRouter();
 const totalLiability = ref(0);
 const credits = ref(null);
 const loading = ref(true);
+const auth = useAuthStore();
 
 const buttons = [
   {
@@ -98,8 +100,7 @@ async function fetchUserInfo() {
 onMounted(fetchUserInfo);
 
 function logOut() {
-  localStorage.removeItem('access_token');
-  localStorage.removeItem('refresh_token');
+  auth.logout();
   router.push('/login');
 }
 </script>
