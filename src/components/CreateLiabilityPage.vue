@@ -39,9 +39,6 @@
       >
         Создать новый долг
       </b-button>
-      <b-button size="sm" variant="secondary" class="btn-block" @click="goBack">
-        Назад
-      </b-button>
     </div>
 
     <!-- Модалка создания шаблона -->
@@ -72,6 +69,8 @@
 
 <script>
 import api from "../api/axios.js";
+import { toast } from "vue3-toastify"
+import "vue3-toastify/dist/index.css"
 
 export default {
   name: "CreateLiabilityPage",
@@ -108,6 +107,7 @@ export default {
               count: template.inputValue,
             });
             template.inputValue = 0;
+            toast.success("Сохранено!")
           }
         }
       } catch (error) {
@@ -142,9 +142,6 @@ export default {
     confirmDelete(template) {
       this.templateToDelete = template;
       this.showDeleteConfirm = true;
-    },
-    goBack() {
-      this.$router.push('/');
     },
   },
   mounted() {

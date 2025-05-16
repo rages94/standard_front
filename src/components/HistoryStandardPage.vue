@@ -114,12 +114,7 @@
               </b-table>
             </div>
           </b-tab>
-
         </b-tabs>
-        <br>
-        <b-button variant="secondary" size="sm" class="btn-block" @click="goBack">
-          Назад
-        </b-button>
       </div>
     </div>
   </b-container>
@@ -257,10 +252,6 @@ export default {
         this.fetchCredits();
       });
     },
-
-    goBack() {
-        this.$router.push('/');
-      },
   },
   mounted() {
     this.fetchCompletedStandards();

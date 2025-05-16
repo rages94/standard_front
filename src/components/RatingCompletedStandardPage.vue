@@ -50,11 +50,6 @@
             </template>
           </b-table>
         </div>
-
-        <br>
-        <b-button variant="secondary" size="sm" class="btn-block" @click="goBack">
-          Назад
-        </b-button>
       </div>
     </div>
   </b-container>
@@ -155,10 +150,6 @@ export default {
       await this.fetchStandards();
       this.fetchUserRating();
     },
-
-    goBack() {
-        this.$router.push('/');
-      },
   },
   mounted() {
     this.fetchData();

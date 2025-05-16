@@ -11,77 +11,82 @@
         />
       </div>
       <span class="standard-name">
-        {{ standard.name }} 
+        {{ standard.name }}
         <span v-if="standard.count" :style="{ fontSize: 'smaller', color: 'gray' }">
-            {{ standard.count + ' шт. = 1 н.' }}
-          </span>
+          {{ standard.count + ' шт. = 1 н.' }}
+        </span>
       </span>
     </div>
     <div class="actions mt-4">
-      <b-button :disabled="isLoading" size="sm" variant="primary" class="btn-block mb-2" @click="saveCompletedStandards">
+      <b-button
+        :disabled="isLoading"
+        size="sm"
+        variant="primary"
+        class="btn-block mb-2"
+        @click="saveCompletedStandards"
+      >
         Сохранить <b-spinner v-if="isLoading" small></b-spinner>
-      </b-button>
-      <b-button variant="secondary"  size="sm" class="btn-block" @click="goBack">
-        Назад
       </b-button>
     </div>
   </b-container>
 </template>
 
 <script>
-import api from "../api/axios.js";
+import api from "../api/axios.js"
+import { toast } from "vue3-toastify"
+import "vue3-toastify/dist/index.css"
 
 export default {
   name: "CreateCompletedStandardPage",
   data() {
     return {
-      standards: [], // API response with templates
+      standards: [],
       isLoading: false,
-    };
+    }
   },
   methods: {
-    // Fetch liability templates from the API
     async fetchStandards() {
       try {
-        const response = await api.get("/standards/");
+        const response = await api.get("/standards/")
         this.standards = response.data.map((template) => ({
           ...template,
-          inputValue: 0, // Add a field for user input
-        }));
+          inputValue: 0,
+        }))
       } catch (error) {
-        console.error("Error fetching standards:", error);
+        console.error("Error fetching standards:", error)
       }
     },
-    // Save completed standards to the API
     async saveCompletedStandards() {
       try {
-        this.isLoading = true;
+        this.isLoading = true
+        let anythingSaved = false
         for (const template of this.standards) {
           if (template.inputValue > 0) {
-            const completed_type = localStorage.getItem('completed_type');
+            const completed_type = localStorage.getItem("completed_type")
             await api.post("/completed_standards/", {
               standard_id: template.id,
               count: template.inputValue,
-              completed_type: completed_type,
-            });
+              completed_type,
+            })
+            template.inputValue = 0
+            anythingSaved = true
           }
         }
-        this.goBack();
+        if (anythingSaved) {
+          toast.success("Сохранено!")
+        }
       } catch (error) {
-        console.error("Error saving completed standards:", error);
+        console.error("Error saving completed standards:", error)
+        toast.error("Ошибка при сохранении")
       } finally {
-        this.isLoading = false;
+        this.isLoading = false
       }
-    },
-    // Navigate back to MainPage
-    goBack() {
-      this.$router.push('/');
     },
   },
   mounted() {
-    this.fetchStandards();
+    this.fetchStandards()
   },
-};
+}
 </script>
 
 <style scoped>
@@ -94,18 +99,15 @@ export default {
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 .standard-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
 }
-
 .input-container {
   flex: 0 0 80px;
 }
-
 .standard-name {
   flex: 1;
   font-size: 1.2rem;
@@ -113,16 +115,13 @@ export default {
   color: #333;
   text-align: right;
 }
-
 .input-fixed-size {
-  width: 80px; /* Fixed width for consistency */
+  width: 80px;
   text-align: center;
 }
-
 .actions {
   text-align: center;
 }
-
 .btn-block {
   width: 100%;
 }

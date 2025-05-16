@@ -40,6 +40,7 @@ async function fetchUserInfo() {
   try {
     const userRes = await api.get('/users/me/');
     totalLiability.value = userRes.data.total_liabilities;
+    localStorage.setItem('completed_type', userRes.data.completed_type);
 
     const creditRes = await api.get('/credits/current/');
     credits.value = creditRes.data.count - creditRes.data.completed_count;
