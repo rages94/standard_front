@@ -5,9 +5,6 @@
         <LineChart :data="chartData" :options="chartOptions" />
       </div>
       <div class="actions mt-4">
-        <b-button variant="secondary" size="sm" class="btn-block" @click="goBack">
-          Назад
-        </b-button>
       </div>
     </b-container>
   </template>
@@ -104,10 +101,6 @@
         } catch (error) {
           console.error("Ошибка при загрузке данных:", error);
         }
-      },
-
-      goBack() {
-        this.$router.push('/');
       },
     },
     mounted() {
