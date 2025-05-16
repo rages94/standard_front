@@ -19,25 +19,6 @@
         <br>
       </div>
       <b-skeleton v-else type="text" class="mb-5 mx-auto" width="90%"></b-skeleton>
-      <div class="buttons">
-        <b-row v-for="btn in buttons" class="mb-3 button-styled">
-          <b-button 
-            :variant="btn.variant"
-            class="button-styled"
-            @click="btn.action"
-          >
-          {{ btn.label }}
-          </b-button>
-        </b-row>
-
-        <b-row class="mt-5">
-          <b-col class="text-center">
-            <b-button variant="link" class="text-danger fs-6" @click="logOut">
-              Выйти
-            </b-button>
-          </b-col>
-        </b-row>
-      </div>
     </div>
   </b-container>
 </template>
@@ -53,34 +34,6 @@ const totalLiability = ref(0);
 const credits = ref(null);
 const loading = ref(true);
 const auth = useAuthStore();
-
-const buttons = [
-  {
-    label: 'Записать долг',
-    action: () => router.push('/create-liability'),
-    variant: 'primary',
-  },
-  {
-    label: 'Списать долг',
-    action: () => router.push('/create-completed-standard'),
-    variant: 'primary',
-  },
-  {
-    label: 'История',
-    action: () => router.push('/history'),
-    variant: 'primary',
-  },
-  {
-    label: 'График',
-    action: () => router.push('/chart-completed-standard'),
-    variant: 'primary',
-  },
-  {
-    label: 'Рейтинг',
-    action: () => router.push('/rating-completed-standard'),
-    variant: 'primary',
-  },
-];
 
 async function fetchUserInfo() {
   loading.value = true;
@@ -98,16 +51,10 @@ async function fetchUserInfo() {
 }
 
 onMounted(fetchUserInfo);
-
-function logOut() {
-  auth.logout();
-  router.push('/login');
-}
 </script>
 
 <style scoped>
 .main-page {
-  min-height: 100vh;
   color: #000000;
   text-align: center;
   padding: 20px;

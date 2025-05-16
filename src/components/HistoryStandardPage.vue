@@ -272,7 +272,6 @@ export default {
 
 <style scoped>
 .history-page {
-  min-height: 100vh;
   color: #000000;
   text-align: center;
   padding: 20px;
