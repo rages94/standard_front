@@ -1,15 +1,29 @@
 <template>
-  <div id="app-container">
-    <!-- Toggle Button -->
-    <b-button
-      v-if="auth.isAuthenticated"
-      variant="link"
-      class="sidebar-toggle-button"
-      @click="toggleSidebar"
-    >
-      <i class="fa fa-bars"></i>
-    </b-button>
-
+  <div>
+  <nav class="navbar">
+    <div class="navbar-left">
+      <b-button
+        v-if="auth.isAuthenticated"
+        variant="link"
+        class="sidebar-toggle-button"
+        @click="toggleSidebar"
+      >
+        <i class="fa fa-bars"></i>
+      </b-button>
+      <img v-if="!auth.isAuthenticated" src="@/assets/logo.png" alt="Logo" class="navbar-logo" />
+    </div>
+    <div class="navbar-right">
+      <template v-if="auth.isAuthenticated">
+        <b-button variant="link" class="text-danger" @click="logOut">
+          <i class="fa fa-sign-out"></i> Выйти
+        </b-button>
+      </template>
+      <template v-else>
+        <router-link to="/login" variant="link" class="nav-btn">Войти</router-link>
+        <router-link to="/signup" variant="link" class="nav-btn">Регистрация</router-link>
+      </template>
+    </div>
+  </nav>
     <!-- Sidebar -->
     <div
       v-if="auth.isAuthenticated"
@@ -127,7 +141,6 @@ export default {
       { label: "История", to: "/history", icon: "fa fa-history" },
       { label: "График", to: "/chart-completed-standard", icon: "fa fa-bar-chart" },
       { label: "Рейтинг", to: "/rating-completed-standard", icon: "fa fa-trophy" },
-      { label: "Выйти", icon: "fa fa-sign-out", action: logOut },
     ];
 
     return {
@@ -140,6 +153,7 @@ export default {
       onMenuItemClick,
       windowWidth,
       menuItems,
+      logOut,
     };
   }
 };
@@ -154,10 +168,7 @@ export default {
 }
 
 .sidebar-toggle-button {
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  z-index: 1041;
+  margin-left: 1rem;
   border-radius: 8px;
 }
 
@@ -246,5 +257,30 @@ export default {
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
   z-index: 1039;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1050;
+}
+
+.navbar-logo {
+  height: 60px;
+}
+.nav-btn {
+  margin-left: 1rem;
+  font-weight: 500;
+  color: #007bff;
+  text-decoration: none;
 }
 </style>
