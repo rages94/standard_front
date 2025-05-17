@@ -3,8 +3,7 @@
     <div class="main-box">
       <h2 class="text-center mb-5">Рейтинг упражнений</h2>
       <div class="actions mt-4">
-        <div>
-
+        <div class="overflow-visible">
           <b-row class="my-1">
             <b-col class="col-md-9">
               Тип упражнения
@@ -35,7 +34,7 @@
           </b-row>
 
           <!-- Таблица данных -->
-          <b-table :items="selectedUserRatings" :fields="fields" striped hover>
+          <b-table :items="selectedUserRatings" :fields="fields" striped small>
             <template #cell(index)="data">
               {{ data.index + 1 }}
             </template>
@@ -165,13 +164,14 @@ export default {
 }
 
 .main-box {
-    width: 400px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+  width: 100%;
+  max-width: 800px;
+  min-width: 400px;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
 .header {
   margin-bottom: 40px;

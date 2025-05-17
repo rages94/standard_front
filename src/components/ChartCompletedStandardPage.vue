@@ -111,13 +111,13 @@
   
   <style scoped>
   .create-completed-standard-page {
-    max-width: 800px;
-    margin: 20px auto;
+    width: 100%;
+    max-width: 1200px;
+    min-width: 400px;
     padding: 20px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
   .standard-item {

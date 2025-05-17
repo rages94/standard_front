@@ -10,7 +10,7 @@
         >
           {{ totalLiability }}
         </h2>
-        <b-skeleton v-else type="text" class="skeleton-heading mb-5 mx-auto" width="45%"></b-skeleton>
+        <b-skeleton v-else type="text" class="skeleton-heading mb-5 mx-auto" width="20%"></b-skeleton>
       </div>
       <div v-if="!loading">
         <h3 class="mb-3" v-if="credits > 0">Долг в этом месяце: {{ credits }}</h3>
@@ -18,7 +18,7 @@
         <h3 v-if="typeof credits === 'number' && credits < 1" class="mb-3 no-credits">Долг за месяц списан</h3>
         <br>
       </div>
-      <b-skeleton v-else type="text" class="mb-5 mx-auto" width="90%"></b-skeleton>
+      <b-skeleton v-else type="text" class="mb-5 mx-auto" width="50%"></b-skeleton>
     </div>
   </b-container>
 </template>
@@ -62,13 +62,14 @@ onMounted(fetchUserInfo);
 }
 
 .main-box {
-    width: 400px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+  width: 100%;
+  max-width: 800px;
+  min-width: 400px;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
 .header {
   margin-bottom: 40px;
