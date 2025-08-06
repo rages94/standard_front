@@ -1,18 +1,25 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import LiabilitiesDashboard from './components/MainPage.vue';
+import MainPage from './components/MainPage.vue';
 import CreateLiability from './components/CreateLiabilityPage.vue';
 import CreateCompletedStandard from './components/CreateCompletedStandardPage.vue';
-import ChartCompletedStandard from './components/ChartCompletedStandardPage.vue';
+import ChartCompletedStandard from './components/Heatmap.vue';
 import RatingCompletedStandard from './components/RatingCompletedStandardPage.vue';
 import HistoryStandard from './components/HistoryStandardPage.vue';
 import LoginPage from './components/LoginPage.vue';
+import LoginBotPage from './components/LoginBotPage.vue';
 import SignUpPage from './components/SignUpPage.vue';
+import WelcomePage from './components/WelcomePage.vue';
 
 const routes = [
   {
     path: '/',
-    name: 'LiabilitiesDashboard',
-    component: LiabilitiesDashboard,
+    name: 'MainPage',
+    component: MainPage,
+  },
+  {
+    path: '/welcome',
+    name: 'WelcomePage',
+    component: WelcomePage,
   },
   {
     path: '/create-liability',
@@ -40,6 +47,7 @@ const routes = [
     component: HistoryStandard,
   },
   { path: '/login', component: LoginPage },
+  { path: '/login/bot/', component: LoginBotPage },
   { path: '/signup', component: SignUpPage },
 ];
 

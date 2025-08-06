@@ -116,7 +116,7 @@ export default {
     },
     async fetchUserRating() {
       try {
-        const response = await api.get(`/completed_standards/rating/?period_days=${this.periodDays | 0}`);
+        const response = await api.get(`/completed_standards/rating/?period_days=${this.periodDays | 1}`);
         this.userRatings = response.data; 
         this.selectStandard(this.selectedStandardName)
         this.setCompletedStandardInfo()

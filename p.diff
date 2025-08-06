@@ -1,0 +1,141 @@
+diff --git a/src/App.vue b/src/App.vue
+index 5913c52..b8e8f57 100644
+--- a/src/App.vue
++++ b/src/App.vue
+@@ -1,20 +1,42 @@
+ <template>
+   <div id="app-container">
+-    <!-- Toggle Button -->
+-    <b-button
+-      v-if="auth.isAuthenticated"
+-      variant="link"
+-      class="sidebar-toggle-button"
+-      @click="toggleSidebar"
+-    >
+-      <i class="fa fa-bars"></i>
+-    </b-button>
++    <!-- Navbar -->
++    <b-navbar toggleable="lg" variant="light" fixed="top" class="app-navbar shadow-sm">
++      <div class="container-fluid">
++        <!-- Sidebar Toggle Button (only if authenticated) -->
++        <b-button
++          v-if="auth.isAuthenticated"
++          variant="link"
++          class="sidebar-toggle-navbar-button p-0 me-2"
++          @click="toggleSidebar"
++          title="Toggle sidebar"
++        >
++          <i class="fa fa-bars fa-lg"></i>
++        </b-button>
++
++        <b-navbar-brand @click="navigateToHome" style="cursor: pointer;">
++          <img src="@/assets/logo.png" alt="Logo" class="navbar-logo">
++        </b-navbar-brand>
++
++        <b-navbar-toggle target="nav-collapse-main"></b-navbar-toggle>
++
++        <b-collapse id="nav-collapse-main" is-nav>
++          <b-navbar-nav class="ms-auto align-items-center">
++            <template v-if="auth.isAuthenticated">
++              <b-nav-item @click="logOut" class="d-flex align-items-center">
++                <i class="fa fa-sign-out me-1"></i> Выйти
++              </b-nav-item>
++            </template>
++            <template v-else>
++              <b-nav-item :to="{ path: '/login' }">Войти</b-nav-item>
++              <b-nav-item :to="{ path: '/signup' }">Регистрация</b-nav-item>
++            </template>
++          </b-navbar-nav>
++        </b-collapse>
++      </div>
++    </b-navbar>
+ 
+     <!-- Sidebar -->
+     <div
+       v-if="auth.isAuthenticated"
+-      class="custom-sidebar"
+       :class="{
+         collapsed: isSidebarCollapsed && !isMobile,
+         'mobile-visible': isMobile && isMobileSidebarVisible
+@@ -86,6 +108,13 @@
+       router.push('/login');
+     };
+ 
++    const navigateToHome = () => {
++      router.push('/');
++      if (isMobile.value && isMobileSidebarVisible.value) {
++        hideMobileSidebar();
++      }
++    };
++
+     onMounted(() => {
+       window.addEventListener('resize', updateWidth);
+     });
+@@ -100,7 +129,6 @@
+       { label: "История", to: "/history", icon: "fa fa-history" },
+       { label: "График", to: "/chart-completed-standard", icon: "fa fa-bar-chart" },
+       { label: "Рейтинг", to: "/rating-completed-standard", icon: "fa fa-trophy" },
+-      { label: "Выйти", icon: "fa fa-sign-out", action: logOut },
+     ];
+ 
+     return {
+@@ -113,6 +141,7 @@
+       onMenuItemClick,
+       windowWidth,
+       menuItems,
++      navigateToHome,
+     };
+   }
+ };
+@@ -126,24 +155,33 @@
+   overflow-x: hidden;
+ }
+ 
+-.sidebar-toggle-button {
+-  position: fixed;
+-  top: 1rem;
+-  left: 1rem;
+-  z-index: 1041;
+-  border-radius: 8px;
++.app-navbar {
++  /* Navbar styling if needed beyond Bootstrap defaults */
++}
++
++.navbar-logo {
++  height: 35px; /* Adjust as needed */
++}
++
++.sidebar-toggle-navbar-button {
++  color: #6c757d; /* Default icon color on light navbar */
++  text-decoration: none; /* Remove underline from link variant */
++}
++
++.sidebar-toggle-navbar-button:hover {
++  color: #000;
+ }
+ 
+ .custom-sidebar {
+   position: fixed;
+   top: 0;
+   left: 0;
+-  height: 100vh;
++  height: 100%;
+   width: 250px;
+   background-color: #ffffff;
+   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+-  padding-top: 4.5rem;
+-  transition: all 0.3s ease;
++  padding-top: 75px; /* Adjust to be below fixed navbar */
++  transition: width 0.3s ease, transform 0.3s ease;
+   overflow-x: hidden;
+   z-index: 1040;
+ }
+@@ -203,7 +241,7 @@
+ 
+ .page-content {
+   padding: 20px;
+-  padding-top: 4.5rem;
++  padding-top: 75px; /* Adjust to be below fixed navbar */
+   position: relative;
+   z-index: 1;
+ }
