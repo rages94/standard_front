@@ -63,7 +63,7 @@ export default {
     return {
       userRatings: null,
       standards: [],
-      periodDays: null,
+      periodDays: 1,
       fields: [
           {
             key: 'index',
@@ -116,7 +116,10 @@ export default {
     },
     async fetchUserRating() {
       try {
-        const response = await api.get(`/completed_standards/rating/?period_days=${this.periodDays | 1}`);
+        const response = await api.get(`/completed_standards/rating/`, {
+          params: this.periodDays !== '' ? { period_days: this.periodDays } : {}
+        }
+      );
         this.userRatings = response.data; 
         this.selectStandard(this.selectedStandardName)
         this.setCompletedStandardInfo()
