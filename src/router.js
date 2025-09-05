@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import MainPage from './components/MainPage.vue';
 import CreateLiability from './components/CreateLiabilityPage.vue';
 import CreateCompletedStandard from './components/CreateCompletedStandardPage.vue';
-import ChartCompletedStandard from './components/Heatmap.vue';
+import ChartCompletedStandard from './components/ChartCompletedStandardPage.vue';
 import RatingCompletedStandard from './components/RatingCompletedStandardPage.vue';
 import HistoryStandard from './components/HistoryStandardPage.vue';
 import LoginPage from './components/LoginPage.vue';
