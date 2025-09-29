@@ -56,6 +56,7 @@
   
   <script>
   import api from '../api/axios.js';
+  import { useAuthStore } from '@/stores/auth';
   
   export default {
     data() {
@@ -88,11 +89,7 @@
           });
   
           const { access_token, refresh_token } = response.data;
-          // Save tokens in localStorage or Vuex for later use
-          localStorage.setItem('access_token', access_token);
-          localStorage.setItem('refresh_token', refresh_token);
-  
-          // Redirect to another page (e.g., Table Page)
+          useAuthStore().login(access_token, refresh_token)
           this.$router.push('/');
         } catch (error) {
           console.error(error);
