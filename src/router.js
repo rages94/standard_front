@@ -9,6 +9,7 @@ import LoginPage from './components/LoginPage.vue';
 import LoginBotPage from './components/LoginBotPage.vue';
 import SignUpPage from './components/SignUpPage.vue';
 import WelcomePage from './components/WelcomePage.vue';
+import ProfilePage from './components/ProfilePage.vue';
 
 const routes = [
   {
@@ -46,6 +47,7 @@ const routes = [
     name: 'HistoryStandard',
     component: HistoryStandard,
   },
+  { path: '/profile', component: ProfilePage },
   { path: '/login', component: LoginPage },
   { path: '/login/bot/', component: LoginBotPage },
   { path: '/signup', component: SignUpPage },

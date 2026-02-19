@@ -134,8 +134,9 @@ export default {
       window.removeEventListener('resize', updateWidth);
     });
 
-    const menuItems = [
+const menuItems = [
       { label: "Главная", to: "/", icon: "fa fa-home" },
+      { label: "Профиль", to: "/profile", icon: "fa fa-user" },
       { label: "Записать долг", to: "/create-liability", icon: "fa fa-pencil-square-o" },
       { label: "Списать долг", to: "/create-completed-standard", icon: "fa fa-check-square-o" },
       { label: "История", to: "/history", icon: "fa fa-history" },
