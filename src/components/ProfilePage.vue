@@ -147,13 +147,13 @@ async function handleSave() {
     user.value = response.data;
     localStorage.setItem('user_weight', response.data.weight || 70);
     toast.success('Профиль успешно обновлён!', {
-      position: toast.POSITION.TOP_RIGHT,
+      position: toast.POSITION.BOTTOM_RIGHT,
       autoClose: 3000,
     });
   } catch (error) {
     console.error('Ошибка при сохранении:', error);
     toast.error('Ошибка при сохранении профиля', {
-      position: toast.POSITION.TOP_RIGHT,
+      position: toast.POSITION.BOTTOM_RIGHT,
       autoClose: 3000,
     });
   } finally {

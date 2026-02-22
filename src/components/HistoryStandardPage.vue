@@ -2,7 +2,6 @@
   <div class="history-page">
     <div class="history-container">
       <h1 class="page-title">
-        <i class="fa fa-history"></i>
         История
       </h1>
 
@@ -45,9 +44,6 @@
               :key="item.id"
               class="history-card completed-card"
             >
-              <div class="card-icon">
-                <i class="fa fa-check"></i>
-              </div>
               <div class="card-content">
                 <div class="card-header">
                   <div class="card-title">{{ item.standard?.name || 'Упражнение' }}</div>
@@ -61,11 +57,18 @@
                   </div>
                 </div>
                 <div class="card-details">
-                  <span class="detail-main highlight">
-                    <strong>{{ Math.floor(item.count / item.standard?.count) }}</strong> норм
-                  </span>
+                  <template v-if="item.standard?.category === 'weightlifting' && item.weight">
+                    <span class="detail-main highlight">
+                      <strong>{{ item.count }} × {{ item.weight }}</strong> кг
+                    </span>
+                  </template>
+                  <template v-else>
+                    <span class="detail-main highlight">
+                      <strong>{{ item.count }}</strong> шт
+                    </span>
+                  </template>
                   <span class="detail-sub">
-                    ({{ item.count }} шт)
+                    ({{ item.total_norm ? Number(item.total_norm).toFixed(2) : 0 }} н)
                   </span>
                 </div>
                 <div class="card-date">{{ formatDate(item.created_at) }}</div>
@@ -83,9 +86,6 @@
               :key="item.id"
               class="history-card liability-card"
             >
-              <div class="card-icon">
-                <i class="fa fa-exclamation"></i>
-              </div>
               <div class="card-content">
                 <div class="card-header">
                   <div class="card-title">
@@ -102,14 +102,12 @@
                 </div>
                 <div class="card-details">
                   <span class="detail-main negative">
-                    <strong>{{
-                      item.liability_template
-                        ? Math.floor(item.count * item.liability_template.count)
-                        : item.count
-                    }}</strong> норм
+                    <strong>{{ item.count }}</strong>
                   </span>
                   <span class="detail-sub">
-                    ({{ item.count }} шт)
+                    ({{ item.liability_template
+                        ? item.count * item.liability_template.count
+                        : item.count }} н)
                   </span>
                 </div>
                 <div class="card-date">{{ formatDate(item.created_at) }}</div>
@@ -149,7 +147,7 @@
               <div class="card-content">
                 <div class="credit-stats">
                   <div class="stat-row">
-                    <span class="stat-label">Всего норм:</span>
+                    <span class="stat-label">Норм в зачете:</span>
                     <span class="stat-value">{{ item.count }}</span>
                   </div>
                   <div class="stat-row">
@@ -631,13 +629,6 @@ async function confirmDeleteLiabilityAction() {
   font-weight: 700;
   color: #333;
   margin: 0 0 24px 0;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.page-title i {
-  color: #007bff;
 }
 
 .toggle-tabs {
@@ -780,11 +771,11 @@ async function confirmDeleteLiabilityAction() {
 }
 
 .detail-main.highlight strong {
-  color: #28a745;
+  color: #000000;
 }
 
 .detail-main.negative strong {
-  color: #dc3545;
+  color: #000000;
 }
 
 .detail-sub {

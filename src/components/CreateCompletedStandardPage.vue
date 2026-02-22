@@ -2,7 +2,6 @@
   <div class="create-page">
     <div class="create-container">
       <h1 class="page-title">
-        <i class="fa fa-check-circle"></i>
         Списать долг
       </h1>
 
@@ -30,7 +29,7 @@
             >
               <div class="standard-name">{{ standard.name }}</div>
               <div v-if="standard.count" class="standard-info">
-                {{ standard.count }} шт = 1 норм
+                {{ standard.count }} шт = 1 н.
               </div>
             </div>
           </div>
@@ -75,7 +74,7 @@
 
           <div class="norms-preview">
             <i class="fa fa-calculator"></i>
-            <span>≈ {{ calculatedNorms }} норм</span>
+            <span>≈ {{ calculatedNorms }} н.</span>
           </div>
         </div>
         <div class="modal-footer">
@@ -236,13 +235,6 @@ onMounted(() => {
   font-weight: 700;
   color: #333;
   margin: 0 0 24px 0;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.page-title i {
-  color: #007bff;
 }
 
 .loading-container {

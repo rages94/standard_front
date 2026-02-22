@@ -142,6 +142,7 @@ const menuItems = [
       { label: "История", to: "/history", icon: "fa fa-history" },
       { label: "График", to: "/chart-completed-standard", icon: "fa fa-bar-chart" },
       { label: "Рейтинг", to: "/rating-completed-standard", icon: "fa fa-trophy" },
+      { label: "Награды", to: "/achievements", icon: "fa fa-star" },
     ];
 
     return {
