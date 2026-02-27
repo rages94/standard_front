@@ -14,11 +14,11 @@
         <div class="filters-section">
           <div class="filter-row">
             <div class="filter-group">
-              <label class="filter-label">Категория</label>
-              <select v-model="selectedCategory" class="filter-select">
-                <option value="">Все категории</option>
-                <option v-for="cat in categories" :key="cat.value" :value="cat.value">
-                  {{ cat.value }}
+              <label class="filter-label">Упражнение</label>
+              <select v-model="selectedStandard" class="filter-select" @change="onStandardChange">
+                <option value="">Все упражнения</option>
+                <option v-for="std in categories" :key="std.id" :value="std.id">
+                  {{ std.name }}
                 </option>
               </select>
             </div>
@@ -57,7 +57,7 @@
             </div>
             
             <div class="achievement-icon">
-              <i :class="getCategoryIcon(achievement.category)"></i>
+              <i :class="getCategoryIcon(achievement)"></i>
             </div>
             
             <div class="achievement-info">
@@ -102,8 +102,9 @@ import api from '../api/axios.js';
 
 const loading = ref(true);
 const achievements = ref([]);
-const categories = ref([]);
-const selectedCategory = ref('');
+const categories = ref([]);  // standards
+const standardsMap = ref({});  // id -> standard
+const selectedStandard = ref('');
 const showOnlyEarned = ref(false);
 
 const earnedCount = computed(() => {
@@ -116,10 +117,6 @@ const totalCount = computed(() => {
 
 const filteredAchievements = computed(() => {
   let result = achievements.value;
-  
-  if (selectedCategory.value) {
-    result = result.filter(a => a.category === selectedCategory.value);
-  }
   
   if (showOnlyEarned.value) {
     result = result.filter(a => a.is_earned);
@@ -138,7 +135,11 @@ function getRarityLabel(rarity) {
   return labels[rarity] || rarity;
 }
 
-function getCategoryIcon(category) {
+function getCategoryIcon(achievement) {
+  // Try to get category from standard
+  const standard = standardsMap.value[achievement.standard_id];
+  const category = standard?.category;
+  
   const icons = {
     pushups: 'fa fa-hand-rock',
     pullups: 'fa fa-arrow-up',
@@ -187,12 +188,34 @@ async function fetchAchievements() {
   }
 }
 
-async function fetchCategories() {
+async function fetchAchievementsByStandard(standardId) {
   try {
-    const response = await api.get('/achievements/categories/');
-    categories.value = response.data;
+    const response = await api.get(`/achievements/standard/${standardId}/`);
+    achievements.value = response.data;
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    console.error('Error fetching achievements:', error);
+  }
+}
+
+function onStandardChange() {
+  if (selectedStandard.value) {
+    fetchAchievementsByStandard(selectedStandard.value);
+  } else {
+    fetchAchievements();
+  }
+}
+
+async function fetchStandards() {
+  try {
+    const response = await api.get('/standards/');
+    categories.value = response.data;
+    // Build map for icon lookup
+    standardsMap.value = response.data.reduce((acc, std) => {
+      acc[std.id] = std;
+      return acc;
+    }, {});
+  } catch (error) {
+    console.error('Error fetching standards:', error);
   }
 }
 
@@ -200,7 +223,7 @@ async function fetchData() {
   loading.value = true;
   await Promise.all([
     fetchAchievements(),
-    fetchCategories(),
+    fetchStandards(),
   ]);
   loading.value = false;
 }

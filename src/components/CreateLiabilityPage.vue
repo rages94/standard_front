@@ -45,14 +45,13 @@
         <div class="actions-section">
           <button class="save-btn" :disabled="isLoading" @click="saveLiabilities">
             <span v-if="isLoading" class="btn-spinner"></span>
-            <span v-else>
-              <i class="fa fa-save"></i>
-              Сохранить
-            </span>
+            <span v-else>Сохранить</span>
           </button>
-          
-          <button class="create-btn" @click="showModal = true">
-            <i class="fa fa-plus"></i>
+        </div>
+        
+        <div class="create-section">
+          <button class="create-link-btn" @click="showModal = true">
+            <i class="fa fa-plus-circle"></i>
             Создать новый долг
           </button>
         </div>
@@ -322,10 +321,10 @@ onMounted(fetchLiabilityTemplates);
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-bottom: 16px;
 }
 
-.save-btn,
-.create-btn {
+.save-btn {
   width: 100%;
   padding: 14px 20px;
   font-size: 16px;
@@ -337,10 +336,7 @@ onMounted(fetchLiabilityTemplates);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-}
-
-.save-btn {
+  gap: 8px;
   background: #007bff;
   color: white;
 }
@@ -354,14 +350,33 @@ onMounted(fetchLiabilityTemplates);
   cursor: not-allowed;
 }
 
-.create-btn {
-  background: #fff;
-  color: #007bff;
-  border: 2px solid #007bff;
+.create-section {
+  text-align: center;
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f0;
 }
 
-.create-btn:hover {
+.create-link-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.create-link-btn:hover {
   background: #e9f0ff;
+}
+
+.create-link-btn i {
+  font-size: 12px;
 }
 
 .btn-spinner {

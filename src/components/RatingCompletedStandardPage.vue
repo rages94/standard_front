@@ -59,7 +59,7 @@
                 </span>
               </div>
               <div class="user-value">
-                {{ Number(user.standards).toFixed(2) }} норм
+                {{ Math.round(user.standards) }} н
                 <i 
                   v-if="selectedStandard === 'Все упражнения' && getUserDetails(user.username).length > 0" 
                   class="fa fa-chevron-down expand-icon"
@@ -78,7 +78,7 @@
                 class="detail-row"
               >
                 <span class="detail-name">{{ detail.name }}</span>
-                <span class="detail-value">{{ Number(detail.value).toFixed(2) }} норм</span>
+                <span class="detail-value">{{ Math.round(detail.value) }} н</span>
               </div>
             </div>
           </div>
