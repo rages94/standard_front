@@ -28,6 +28,7 @@
 <script>
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
+import { computed } from 'vue';
 
 export default {
   name: "NavBar",
@@ -36,7 +37,7 @@ export default {
     const auth = useAuthStore();
     const router = useRouter();
 
-    const isAuthenticated = auth.isAuthenticated;
+    const isAuthenticated = computed(() => auth.isAuthenticated);
 
     const logOut = () => {
       auth.logout();

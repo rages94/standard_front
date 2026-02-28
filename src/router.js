@@ -3,6 +3,7 @@ import MainPage from './components/MainPage.vue';
 import CreateLiability from './components/CreateLiabilityPage.vue';
 import CreateCompletedStandard from './components/CreateCompletedStandardPage.vue';
 import ChartCompletedStandard from './components/ChartCompletedStandardPage.vue';
+import StatisticsPage from './components/StatisticsPage.vue';
 import RatingCompletedStandard from './components/RatingCompletedStandardPage.vue';
 import HistoryStandard from './components/HistoryStandardPage.vue';
 import LoginPage from './components/LoginPage.vue';
@@ -37,6 +38,11 @@ const routes = [
     path: '/chart-completed-standard',
     name: 'ChartCompletedStandard',
     component: ChartCompletedStandard,
+  },
+  {
+    path: '/statistics',
+    name: 'Statistics',
+    component: StatisticsPage,
   },
   {
     path: '/rating-completed-standard',

@@ -32,7 +32,9 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     // Check if the error is due to token expiry (401)
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response && error.response.status === 401 && 
+        !originalRequest._retry && 
+        !originalRequest.url.includes('/users/login')) {
       originalRequest._retry = true;
 
       try {

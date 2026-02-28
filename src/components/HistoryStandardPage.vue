@@ -694,7 +694,7 @@ async function confirmDeleteLiabilityAction() {
 
 .cards-grid {
   display: grid;
-  gap: 12px;
+  gap: 8px;
 }
 
 .history-card {
@@ -758,7 +758,7 @@ async function confirmDeleteLiabilityAction() {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .detail-main {
@@ -956,7 +956,7 @@ async function confirmDeleteLiabilityAction() {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .card-actions {

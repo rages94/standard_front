@@ -13,7 +13,6 @@
         <div v-for="category in categories" :key="category.id" class="category-section">
           <div class="category-header" @click="toggleCategory(category.id)">
             <div class="category-title">
-              <i :class="category.icon"></i>
               {{ category.label }}
             </div>
             <i :class="expandedCategories.includes(category.id) ? 'fa fa-chevron-up' : 'fa fa-chevron-down'"></i>
@@ -28,9 +27,6 @@
               @click="openModal(standard, category.hasWeight)"
             >
               <div class="standard-name">{{ standard.name }}</div>
-              <div v-if="standard.count" class="standard-info">
-                {{ standard.count }} шт = 1 н.
-              </div>
             </div>
           </div>
         </div>
@@ -74,7 +70,7 @@
 
           <div class="norms-preview">
             <i class="fa fa-calculator"></i>
-            <span>≈ {{ calculatedNorms }} н.</span>
+            <span>= {{ calculatedNorms }} н.</span>
           </div>
         </div>
         <div class="modal-footer">
@@ -90,7 +86,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import api from '../api/axios.js';
@@ -103,22 +99,46 @@ const expandedCategories = ref(['calisthenics', 'weightlifting']);
 const modalVisible = ref(false);
 const selectedStandard = ref(null);
 const hasWeight = ref(false);
+const serverNorms = ref(null);
 const form = ref({
   count: null,
   weight: null,
 });
 
+async function ensureUserData() {
+  let userWeight = localStorage.getItem('user_weight');
+  let userSex = localStorage.getItem('user_sex');
+  
+  if (!userWeight || !userSex) {
+    try {
+      const response = await api.get('/users/me/');
+      if (!userWeight) {
+        userWeight = response.data.weight || 70;
+        localStorage.setItem('user_weight', userWeight);
+      }
+      if (!userSex) {
+        userSex = response.data.sex || 'male';
+        localStorage.setItem('user_sex', userSex);
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      if (!userWeight) userWeight = 70;
+      if (!userSex) userSex = 'male';
+    }
+  }
+  
+  return { userWeight: parseFloat(userWeight), userSex };
+}
+
 const categories = [
   {
     id: 'calisthenics',
     label: 'Калистеника',
-    icon: 'fa fa-child',
     hasWeight: false,
   },
   {
     id: 'weightlifting',
     label: 'Тяжёлая атлетика',
-    icon: 'fa fa-plus-circle',
     hasWeight: true,
   }
 ];
@@ -126,14 +146,17 @@ const categories = [
 const calculatedNorms = computed(() => {
   if (!form.value.count || !selectedStandard.value) return 0;
   
-  const count = form.value.count;
-  const standardCount = selectedStandard.value.count || 1;
-  
-  if (hasWeight.value && form.value.weight) {
-    return (count * form.value.weight / 30).toFixed(1);
+  // For weight exercises, require both count and weight
+  if (hasWeight.value && !form.value.weight) {
+    return 0;
   }
   
-  return (count / standardCount).toFixed(1);
+  // Use server-calculated norms
+  if (serverNorms.value !== null) {
+    return parseFloat(serverNorms.value.toFixed(2));
+  }
+  
+  return 0;
 });
 
 function getStandardsByCategory(categoryId) {
@@ -156,6 +179,7 @@ function openModal(standard, weightRequired) {
     count: null,
     weight: null,
   };
+  serverNorms.value = null;
   modalVisible.value = true;
 }
 
@@ -163,11 +187,55 @@ function closeModal() {
   modalVisible.value = false;
   selectedStandard.value = null;
   hasWeight.value = false;
+  serverNorms.value = null;
   form.value = {
     count: null,
     weight: null,
   };
 }
+
+async function fetchNormalization() {
+  if (!selectedStandard.value || !form.value.count) {
+    serverNorms.value = null;
+    return;
+  }
+  
+  try {
+    const completedType = localStorage.getItem('completed_type') || 'count';
+    const payload = {
+      standard_id: selectedStandard.value.id,
+      count: form.value.count,
+      completed_type: completedType,
+    };
+    
+    if (hasWeight.value && form.value.weight) {
+      const { userWeight, userSex } = await ensureUserData();
+      payload.weight = form.value.weight;
+      payload.user_weight = userWeight;
+      payload.user_sex = userSex;
+    }
+    
+    const response = await api.put('/completed_standards/normalization/', payload);
+    serverNorms.value = response.data.total_norm;
+  } catch (error) {
+    console.error('Error fetching normalization:', error);
+    serverNorms.value = null;
+  }
+}
+
+watch(
+  () => [form.value.count, form.value.weight],
+  () => {
+    if (!modalVisible.value || !form.value.count) return;
+    
+    // For weight exercises, need both count and weight
+    if (hasWeight.value && !form.value.weight) {
+      return;
+    }
+    
+    fetchNormalization();
+  }
+);
 
 async function fetchStandards() {
   try {
@@ -198,8 +266,10 @@ async function saveStandard() {
     };
 
     if (hasWeight.value && form.value.weight) {
+      const { userWeight, userSex } = await ensureUserData();
       payload.weight = form.value.weight;
-      payload.user_weight = parseFloat(localStorage.getItem('user_weight') || '70');
+      payload.user_weight = userWeight;
+      payload.user_sex = userSex;
     }
 
     await api.post('/completed_standards/', payload);
@@ -337,12 +407,12 @@ onMounted(() => {
 }
 
 .weight-card {
-  background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
-  border: 1px solid rgba(220, 53, 69, 0.2);
+  background: #f8f9fa;
+  border: none;
 }
 
 .weight-card:hover {
-  background: linear-gradient(135deg, #ffe8e8 0%, #fff 100%);
+  background: #e9f0ff;
 }
 
 .modal-overlay {

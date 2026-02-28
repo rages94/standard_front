@@ -129,6 +129,7 @@ async function fetchUser() {
       sex: response.data.sex || 'male',
     };
     localStorage.setItem('user_weight', response.data.weight || 70);
+    localStorage.setItem('user_sex', response.data.sex || 'male');
   } catch (error) {
     console.error('Ошибка при загрузке профиля:', error);
   } finally {
@@ -146,6 +147,7 @@ async function handleSave() {
     const response = await api.patch('/users/me/', payload);
     user.value = response.data;
     localStorage.setItem('user_weight', response.data.weight || 70);
+    localStorage.setItem('user_sex', response.data.sex || 'male');
     toast.success('Профиль успешно обновлён!', {
       position: toast.POSITION.BOTTOM_RIGHT,
       autoClose: 3000,
