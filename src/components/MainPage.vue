@@ -52,18 +52,37 @@
         </div>
       </div>
 
-      <div v-if="!loading && recentActivity.length > 0" class="recent-section">
-        <div class="recent-header">Недавняя активность</div>
-        <div class="recent-list">
-          <div v-for="item in recentActivity" :key="item.id" class="recent-item">
-            <span class="recent-name">{{ item.standard?.name || 'Упражнение' }}</span>
-            <span class="recent-details">
-              × {{ item.count }}
-              <template v-if="item.weight">
-                × {{ item.weight }}кг
-              </template>
-              <span class="recent-norm">({{ formatNumber(item.total_norm || 0) }}н)</span>
-            </span>
+      <div v-if="!loading && dashboard?.nearest_achievement" class="reward-section">
+        <div class="reward-section-header">Ближайшая награда</div>
+        <div 
+          class="achievement-card" 
+          :class="dashboard.nearest_achievement.achievement?.rarity"
+        >
+          <div class="achievement-rarity" :class="dashboard.nearest_achievement.achievement?.rarity">
+            {{ getRarityLabel(dashboard.nearest_achievement.achievement?.rarity) }}
+          </div>
+          
+          <div class="achievement-icon">
+            <i :class="getAchievementIcon(dashboard.nearest_achievement.achievement)"></i>
+          </div>
+          
+          <div class="achievement-info">
+            <div class="achievement-name">{{ dashboard.nearest_achievement.achievement?.name }}</div>
+            <div class="achievement-description">{{ dashboard.nearest_achievement.achievement?.description }}</div>
+          </div>
+          
+          <div class="achievement-progress">
+            <div class="progress-bar">
+              <div 
+                class="progress-fill" 
+                :class="dashboard.nearest_achievement.achievement?.rarity"
+                :style="{ width: `${getProgressPercent(dashboard.nearest_achievement)}%` }"
+              ></div>
+            </div>
+            <div class="progress-text">
+              {{ Math.round(dashboard.nearest_achievement.current_value) }} / {{ dashboard.nearest_achievement.achievement?.target_value }}
+              <span class="progress-percent">({{ getProgressPercent(dashboard.nearest_achievement) }}%)</span>
+            </div>
           </div>
         </div>
       </div>
@@ -105,8 +124,6 @@ const daysLeftText = computed(() => {
   return `${daysLeft.value} дней осталось`;
 });
 
-const recentActivity = computed(() => dashboard.value?.recent_activity || []);
-
 function formatNumber(num) {
   if (num === null || num === undefined) return '0';
   return Number(num).toFixed(1);
@@ -119,6 +136,33 @@ function declension(number, titles) {
 
 function declensionDays(number) {
   return declension(number, ['день', 'дня', 'дней']);
+}
+
+function getRarityLabel(rarity) {
+  const labels = {
+    common: 'Обычное',
+    rare: 'Редкое',
+    epic: 'Эпическое',
+    legendary: 'Легендарное',
+  };
+  return labels[rarity] || rarity;
+}
+
+function getAchievementIcon(achievement) {
+  if (achievement?.icon) return achievement.icon;
+  
+  const icons = {
+    streak: 'fa fa-fire',
+    meta: 'fa fa-star',
+    count: 'fa fa-check',
+    weight: 'fa fa-dumbbell',
+  };
+  return icons[achievement?.condition_type] || 'fa fa-trophy';
+}
+
+function getProgressPercent(achievementProgress) {
+  const percent = (achievementProgress.current_value / achievementProgress.achievement.target_value) * 100;
+  return Math.min(Math.round(percent), 100);
 }
 
 async function fetchDashboard() {
@@ -387,5 +431,110 @@ onMounted(fetchDashboard);
   .streak-value {
     font-size: 24px;
   }
+}
+
+.reward-section {
+  margin-top: 16px;
+}
+
+.reward-section-header {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.reward-section .achievement-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+  opacity: 1;
+  filter: none;
+}
+
+.reward-section .achievement-rarity {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.reward-section .achievement-rarity.common {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.reward-section .achievement-rarity.rare {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.reward-section .achievement-rarity.epic {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+.reward-section .achievement-icon {
+  width: 48px;
+  height: 48px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.reward-section .achievement-icon i {
+  font-size: 20px;
+  color: #6b7280;
+}
+
+.reward-section .achievement-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.reward-section .achievement-description {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.reward-section .progress-bar {
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.reward-section .progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.reward-section .progress-fill.common { background: #6b7280; }
+.reward-section .progress-fill.rare { background: #007bff; }
+.reward-section .progress-fill.epic { background: #9b59b6; }
+
+.reward-section .progress-text {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.reward-section .progress-percent {
+  color: #999;
 }
 </style>
