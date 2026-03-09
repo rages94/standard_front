@@ -8,11 +8,12 @@
         </span>
       </div>
 
+      <div class="reward-section-header">Текущий зачет</div>
       <div v-if="!loading && creditProgress !== null" class="credit-section">
         <div class="credit-header">
           <span class="credit-label">Зачет</span>
           <span class="credit-progress-text">
-            {{ creditCompleted }} / {{ creditTotal }} норм
+            {{ creditCompleted }} / {{ creditTotal }} н.
           </span>
         </div>
         <div class="progress-bar">
@@ -27,12 +28,13 @@
         Нет активного зачета
       </div>
 
+      <div class="reward-section-header">Стрик активности</div>
       <div v-if="!loading" class="streak-section">
         <div v-if="(dashboard?.streak?.current_streak || 0) >= 14" class="streak-icon">🔥</div>
         <div class="streak-info">
           <div class="streak-current">
             <span class="streak-value">{{ dashboard?.streak?.current_streak || 0 }}</span>
-            <span class="streak-label">{{ declensionDays(dashboard?.streak?.current_streak || 0) }} тренировок подряд</span>
+            <span class="streak-label">{{ declensionDays(dashboard?.streak?.current_streak || 0) }}</span>
           </div>
           <div class="streak-best">
             Рекорд: {{ dashboard?.streak?.longest_streak || 0 }} {{ declensionDays(dashboard?.streak?.longest_streak || 0) }}
@@ -40,20 +42,21 @@
         </div>
       </div>
 
+      <div class="reward-section-header">Выполненные нормы</div>
       <div v-if="!loading" class="stats-row">
         <div class="stat-item">
           <span class="stat-label">Сегодня</span>
-          <span class="stat-value">{{ formatNumber(dashboard?.today_norm || 0) }}н</span>
+          <span class="stat-value">{{ formatNumber(dashboard?.today_norm || 0) }}</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
           <span class="stat-label">За месяц</span>
-          <span class="stat-value">{{ formatNumber(dashboard?.month_norm || 0) }}н</span>
+          <span class="stat-value">{{ formatNumber(dashboard?.month_norm || 0) }}</span>
         </div>
       </div>
 
       <div v-if="!loading && dashboard?.nearest_achievement" class="reward-section">
-        <div class="reward-section-header">Ближайшая награда</div>
+        <div class="reward-section-header">Ближайшее достижение</div>
         <div 
           class="achievement-card" 
           :class="dashboard.nearest_achievement.achievement?.rarity"
@@ -282,8 +285,7 @@ onMounted(fetchDashboard);
   align-items: center;
   gap: 16px;
   padding: 16px;
-  background: linear-gradient(135deg, #fff5f5, #fff);
-  border: 1px solid #ffebeb;
+  background: #f8f9fa;
   border-radius: 8px;
   margin-bottom: 16px;
 }
@@ -305,7 +307,6 @@ onMounted(fetchDashboard);
 .streak-value {
   font-size: 28px;
   font-weight: 700;
-  color: #dc3545;
 }
 
 .streak-label {
@@ -441,7 +442,7 @@ onMounted(fetchDashboard);
   font-size: 14px;
   font-weight: 600;
   color: #333;
-  margin-bottom: 12px;
+  margin-bottom: 4px;
 }
 
 .reward-section .achievement-card {
