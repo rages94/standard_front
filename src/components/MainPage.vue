@@ -191,7 +191,7 @@ onMounted(fetchDashboard);
 
 <style scoped>
 .main-page {
-  padding: 20px;
+  padding: 8px;
   display: flex;
   justify-content: center;
 }
@@ -199,7 +199,7 @@ onMounted(fetchDashboard);
 .main-box {
   width: 100%;
   max-width: 600px;
-  padding: 24px;
+  padding: 8px;
   border-radius: 12px;
   background-color: #fff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);

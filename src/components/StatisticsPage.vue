@@ -330,7 +330,7 @@ export default {
 
 <style scoped>
 .statistics-page {
-  padding: 20px;
+  padding: 8px;
 }
 
 .statistics-container {

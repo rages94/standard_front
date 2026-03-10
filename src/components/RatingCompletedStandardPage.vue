@@ -211,7 +211,7 @@ onMounted(fetchData);
 
 <style scoped>
 .rating-page {
-  padding: 20px;
+  padding: 8px;
   display: flex;
   justify-content: center;
 }

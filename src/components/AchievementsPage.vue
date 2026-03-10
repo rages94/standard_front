@@ -2,7 +2,7 @@
   <div class="achievements-page">
     <div class="achievements-container">
       <h1 class="page-title">
-        Награды
+        Достижения
         <span class="earned-count">{{ earnedCount }} из {{ totalCount }}</span>
       </h1>
 
@@ -233,7 +233,7 @@ onMounted(fetchData);
 
 <style scoped>
 .achievements-page {
-  padding: 20px;
+  padding: 8px;
   display: flex;
   justify-content: center;
 }

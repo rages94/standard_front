@@ -55,7 +55,7 @@ const menuItems = [
   { label: "История", to: "/history", icon: "fa fa-history" },
   { label: "Статистика", to: "/statistics", icon: "fa fa-line-chart" },
   { label: "Рейтинг", to: "/rating-completed-standard", icon: "fa fa-trophy" },
-  { label: "Награды", to: "/achievements", icon: "fa fa-star" },
+  { label: "Достижения", to: "/achievements", icon: "fa fa-star" },
 ];
 
 export default {
