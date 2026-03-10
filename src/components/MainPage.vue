@@ -11,7 +11,6 @@
       <div class="reward-section-header">Текущий зачет</div>
       <div v-if="!loading && creditProgress !== null" class="credit-section">
         <div class="credit-header">
-          <span class="credit-label">Зачет</span>
           <span class="credit-progress-text">
             {{ creditCompleted }} / {{ creditTotal }} н.
           </span>
@@ -19,7 +18,7 @@
         <div class="progress-bar">
           <div class="progress-fill" :style="{ width: creditProgress + '%' }"></div>
         </div>
-        <div class="credit-deadline" v-if="daysLeft !== null">
+        <div class="credit-deadline" v-if="daysLeft !== null && creditProgress < 100">
           {{ daysLeftText }}
         </div>
       </div>
@@ -36,8 +35,9 @@
             <span class="streak-value">{{ dashboard?.streak?.current_streak || 0 }}</span>
             <span class="streak-label">{{ declensionDays(dashboard?.streak?.current_streak || 0) }}</span>
           </div>
-          <div class="streak-best">
-            Рекорд: {{ dashboard?.streak?.longest_streak || 0 }} {{ declensionDays(dashboard?.streak?.longest_streak || 0) }}
+          <div class="stat-divider-line"></div>
+          <div class="stat-record">
+            рекорд: {{ dashboard?.streak?.longest_streak || 0 }} {{ declensionDays(dashboard?.streak?.longest_streak || 0) }}
           </div>
         </div>
       </div>
@@ -47,11 +47,15 @@
         <div class="stat-item">
           <span class="stat-label">Сегодня</span>
           <span class="stat-value">{{ formatNumber(dashboard?.today_norm || 0) }}</span>
+          <div class="stat-divider-line"></div>
+          <span class="stat-record">рекорд: {{ formatNumber(dashboard?.user?.max_daily_norm || 0) }}</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-          <span class="stat-label">За месяц</span>
-          <span class="stat-value">{{ formatNumber(dashboard?.month_norm || 0) }}</span>
+          <span class="stat-label">За неделю</span>
+          <span class="stat-value">{{ formatNumber(dashboard?.week_norm || 0) }}</span>
+          <div class="stat-divider-line"></div>
+          <span class="stat-record">рекорд: {{ formatNumber(dashboard?.user?.max_weekly_norm || 0) }}</span>
         </div>
       </div>
 
@@ -123,8 +127,8 @@ const daysLeftText = computed(() => {
   if (daysLeft.value === null) return '';
   if (daysLeft.value === 0) return 'Сегодня дедлайн!';
   if (daysLeft.value === 1) return '1 день остался';
-  if (daysLeft.value < 5) return `${daysLeft.value} дня осталось`;
-  return `${daysLeft.value} дней осталось`;
+  if (daysLeft.value < 5) return `${daysLeft.value} ${declensionDays(daysLeft.value)} осталось`;
+  return `${daysLeft.value} ${declensionDays(daysLeft.value)} осталось`;
 });
 
 function formatNumber(num) {
@@ -259,14 +263,13 @@ onMounted(fetchDashboard);
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #007bff, #0056b3);
+  background: linear-gradient(90deg, #00b309, #09ff00);
   border-radius: 6px;
   transition: width 0.3s ease;
 }
 
 .credit-deadline {
   font-size: 13px;
-  color: #dc3545;
   text-align: center;
 }
 
@@ -351,6 +354,17 @@ onMounted(fetchDashboard);
   width: 1px;
   height: 40px;
   background: #ddd;
+}
+
+.stat-divider-line {
+  height: 1px;
+  background: #ddd;
+  margin: 6px 0;
+}
+
+.stat-record {
+  font-size: 12px;
+  color: #888;
 }
 
 .recent-section {
