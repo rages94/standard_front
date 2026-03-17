@@ -12,7 +12,7 @@
       <div v-if="!loading && creditProgress !== null" class="credit-section">
         <div class="credit-header">
           <span class="credit-progress-text">
-            {{ creditCompleted }} / {{ creditTotal }} н.
+            {{ formatNumber(creditCompleted) }} / {{ formatNumber(creditTotal) }} н.
           </span>
         </div>
         <div class="progress-bar">

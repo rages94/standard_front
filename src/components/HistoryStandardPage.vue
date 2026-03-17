@@ -148,11 +148,11 @@
                 <div class="credit-stats">
                   <div class="stat-row">
                     <span class="stat-label">Норм в зачете:</span>
-                    <span class="stat-value">{{ item.count }}</span>
+                    <span class="stat-value">{{ Number(item.count).toFixed(1) }}</span>
                   </div>
                   <div class="stat-row">
                     <span class="stat-label">Выполнено:</span>
-                    <span class="stat-value">{{ item.completed_count }}</span>
+                    <span class="stat-value">{{ Number(item.completed_count).toFixed(1) }}</span>
                   </div>
                 </div>
                 <div class="card-period">
