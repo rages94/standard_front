@@ -233,7 +233,7 @@ onMounted(fetchData);
 
 <style scoped>
 .achievements-page {
-  padding: 8px;
+  padding: 4px;
   display: flex;
   justify-content: center;
 }

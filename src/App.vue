@@ -97,9 +97,8 @@ export default {
 }
 
 .page-content {
-  padding: 20px;
+  padding: 4px;
   padding-top: 80px;
-  padding-left: 20px;
   transition: padding-left 0.3s ease;
   position: relative;
   z-index: 1;

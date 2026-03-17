@@ -614,7 +614,7 @@ async function confirmDeleteLiabilityAction() {
 
 <style scoped>
 .history-page {
-  padding: 8px;
+  padding: 4px;
   display: flex;
   justify-content: center;
 }

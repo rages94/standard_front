@@ -16,7 +16,7 @@
 
         <div class="stats-row">
           <div class="stat-card">
-            <div class="stat-value">{{ user.total_liabilities || 0 }}</div>
+            <div class="stat-value">{{ Number(user.total_liabilities || 0).toFixed(1) }}</div>
             <div class="stat-label">Долг</div>
           </div>
           <div class="stat-card">
@@ -172,7 +172,7 @@ onMounted(fetchUser);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 8px;
+  padding: 40px 4px;
 }
 
 .profile-card {

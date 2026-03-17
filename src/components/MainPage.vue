@@ -27,6 +27,23 @@
         Нет активного зачета
       </div>
 
+      <div class="reward-section-header">Выполненные нормы</div>
+      <div v-if="!loading" class="stats-row">
+        <div class="stat-item">
+          <span class="stat-label">Сегодня</span>
+          <span class="stat-value" :class="{ 'stat-value-record': isTodayRecord }">{{ formatNumber(dashboard?.today_norm || 0) }}</span>
+          <div class="stat-divider-line"></div>
+          <span class="stat-record">рекорд: {{ formatNumber(dashboard?.user?.max_daily_norm || 0) }}</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-label">За неделю</span>
+          <span class="stat-value" :class="{ 'stat-value-record': isWeekRecord }">{{ formatNumber(dashboard?.week_norm || 0) }}</span>
+          <div class="stat-divider-line"></div>
+          <span class="stat-record">рекорд: {{ formatNumber(dashboard?.user?.max_weekly_norm || 0) }}</span>
+        </div>
+      </div>
+
       <div class="reward-section-header">Стрик активности</div>
       <div v-if="!loading" class="streak-section">
         <div v-if="(dashboard?.streak?.current_streak || 0) >= 14" class="streak-icon">🔥</div>
@@ -39,23 +56,6 @@
           <div class="stat-record">
             рекорд: {{ dashboard?.streak?.longest_streak || 0 }} {{ declensionDays(dashboard?.streak?.longest_streak || 0) }}
           </div>
-        </div>
-      </div>
-
-      <div class="reward-section-header">Выполненные нормы</div>
-      <div v-if="!loading" class="stats-row">
-        <div class="stat-item">
-          <span class="stat-label">Сегодня</span>
-          <span class="stat-value">{{ formatNumber(dashboard?.today_norm || 0) }}</span>
-          <div class="stat-divider-line"></div>
-          <span class="stat-record">рекорд: {{ formatNumber(dashboard?.user?.max_daily_norm || 0) }}</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <span class="stat-label">За неделю</span>
-          <span class="stat-value">{{ formatNumber(dashboard?.week_norm || 0) }}</span>
-          <div class="stat-divider-line"></div>
-          <span class="stat-record">рекорд: {{ formatNumber(dashboard?.user?.max_weekly_norm || 0) }}</span>
         </div>
       </div>
 
@@ -113,6 +113,18 @@ const creditTotal = computed(() => dashboard.value?.current_credit?.count || 0);
 const creditProgress = computed(() => {
   if (!dashboard.value?.current_credit) return null;
   return Math.min(100, (creditCompleted.value / creditTotal.value) * 100);
+});
+
+const isTodayRecord = computed(() => {
+  const todayNorm = dashboard.value?.today_norm || 0;
+  const maxDaily = dashboard.value?.user?.max_daily_norm || 0;
+  return todayNorm > 20 && todayNorm === maxDaily;
+});
+
+const isWeekRecord = computed(() => {
+  const weekNorm = dashboard.value?.week_norm || 0;
+  const maxWeekly = dashboard.value?.user?.max_weekly_norm || 0;
+  return weekNorm > 100 && weekNorm === maxWeekly;
 });
 
 const daysLeft = computed(() => {
@@ -191,7 +203,7 @@ onMounted(fetchDashboard);
 
 <style scoped>
 .main-page {
-  padding: 8px;
+  padding: 4px;
   display: flex;
   justify-content: center;
 }
@@ -199,7 +211,7 @@ onMounted(fetchDashboard);
 .main-box {
   width: 100%;
   max-width: 600px;
-  padding: 8px;
+  padding: 24px;
   border-radius: 12px;
   background-color: #fff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -348,6 +360,12 @@ onMounted(fetchDashboard);
   font-size: 20px;
   font-weight: 600;
   color: #333;
+}
+
+.stat-value-record {
+  color: #f59e0b;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
 }
 
 .stat-divider {

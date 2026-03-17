@@ -194,7 +194,7 @@ onMounted(fetchLiabilityTemplates);
 
 <style scoped>
 .create-page {
-  padding: 8px;
+  padding: 4px;
   display: flex;
   justify-content: center;
 }
