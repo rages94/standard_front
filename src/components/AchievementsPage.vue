@@ -50,8 +50,9 @@
             v-for="achievement in filteredAchievements"
             :key="achievement.id"
             class="achievement-card"
-            :class="{ earned: achievement.is_earned }"
+            :class="{ earned: achievement.is_earned, 'not-viewed': achievement.is_earned && achievement.is_viewed === false }"
           >
+            <div v-if="achievement.is_earned && achievement.is_viewed === false" class="new-badge">Новое</div>
             <div class="achievement-rarity" :class="achievement.rarity">
               {{ getRarityLabel(achievement.rarity) }}
             </div>
@@ -380,6 +381,25 @@ onMounted(fetchData);
 .achievement-card.earned {
   opacity: 1;
   filter: none;
+}
+
+.achievement-card.not-viewed {
+  box-shadow: 0 2px 12px rgba(0, 123, 255, 0.2);
+  border: 2px solid rgba(0, 123, 255, 0.4);
+}
+
+.new-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  background: #007bff;
+  color: white;
 }
 
 .achievement-rarity {
