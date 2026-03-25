@@ -272,9 +272,15 @@ async function saveStandard() {
       payload.user_sex = userSex;
     }
 
-    await api.post('/completed_standards/', payload);
+    const response = await api.post('/completed_standards/', payload);
     toast.success('Сохранено!', { autoClose: 2000 });
     closeModal();
+
+    // Уведомления о новых достижениях
+    const newAchievements = response?.data?.new_achievements || [];
+    for (const a of newAchievements) {
+      toast.success(`Получено новое достижение: ${a.name}`, { autoClose: 6000 });
+    }
   } catch (error) {
     console.error('Error saving:', error);
     toast.error('Ошибка при сохранении');

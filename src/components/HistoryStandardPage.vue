@@ -512,12 +512,18 @@ async function saveEdit() {
   
   saving.value = true;
   try {
-    await api.patch(`/completed_standards/${editingItem.value.id}`, {
+    const response = await api.patch(`/completed_standards/${editingItem.value.id}`, {
       count: editCount.value
     });
     toast.success('Списание обновлено', { autoClose: 2000 });
     closeEditModal();
     await fetchCompletedStandards();
+
+    // Уведомления о новых достижениях
+    const newAchievements = response?.data?.new_achievements || [];
+    for (const a of newAchievements) {
+      toast.success(`Получено новое достижение: ${a.name}`, { autoClose: 6000 });
+    }
   } catch (error) {
     console.error('Error updating:', error);
     toast.error('Ошибка при обновлении', { autoClose: 2000 });
