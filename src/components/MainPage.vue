@@ -32,15 +32,19 @@
         <div class="stat-item">
           <span class="stat-label">Сегодня</span>
           <span class="stat-value" :class="{ 'stat-value-record': isTodayRecord }">{{ formatNumber(dashboard?.today_norm || 0) }}</span>
-          <div class="stat-divider-line"></div>
-          <span class="stat-record">рекорд: {{ formatNumber(dashboard?.user?.max_daily_norm || 0) }}</span>
+          <template v-if="!isTodayRecord">
+            <div class="stat-divider-line"></div>
+            <span class="stat-record">рекорд: {{ formatNumber(dashboard?.daily_record || 0) }}</span>
+          </template>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
           <span class="stat-label">За неделю</span>
           <span class="stat-value" :class="{ 'stat-value-record': isWeekRecord }">{{ formatNumber(dashboard?.week_norm || 0) }}</span>
-          <div class="stat-divider-line"></div>
-          <span class="stat-record">рекорд: {{ formatNumber(dashboard?.user?.max_weekly_norm || 0) }}</span>
+          <template v-if="!isWeekRecord">
+            <div class="stat-divider-line"></div>
+            <span class="stat-record">рекорд: {{ formatNumber(dashboard?.weekly_record || 0) }}</span>
+          </template>
         </div>
       </div>
 
@@ -117,13 +121,13 @@ const creditProgress = computed(() => {
 
 const isTodayRecord = computed(() => {
   const todayNorm = dashboard.value?.today_norm || 0;
-  const maxDaily = dashboard.value?.user?.max_daily_norm || 0;
+  const maxDaily = dashboard.value?.daily_record || 0;
   return todayNorm > 20 && todayNorm === maxDaily;
 });
 
 const isWeekRecord = computed(() => {
   const weekNorm = dashboard.value?.week_norm || 0;
-  const maxWeekly = dashboard.value?.user?.max_weekly_norm || 0;
+  const maxWeekly = dashboard.value?.weekly_record || 0;
   return weekNorm > 100 && weekNorm === maxWeekly;
 });
 

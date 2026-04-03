@@ -22,26 +22,6 @@
                 </option>
               </select>
             </div>
-
-            <div class="filter-group">
-              <label class="filter-label">Статус</label>
-              <div class="toggle-filter">
-                <button
-                  class="toggle-btn"
-                  :class="{ active: showOnlyEarned === false }"
-                  @click="showOnlyEarned = false"
-                >
-                  Все
-                </button>
-                <button
-                  class="toggle-btn"
-                  :class="{ active: showOnlyEarned === true }"
-                  @click="showOnlyEarned = true"
-                >
-                  Полученные
-                </button>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -331,34 +311,6 @@ onMounted(fetchData);
 
 .filter-select:focus {
   border-color: #007bff;
-}
-
-.toggle-filter {
-  display: flex;
-  background: #f8f9fa;
-  border-radius: 8px;
-  padding: 4px;
-}
-
-.toggle-btn {
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #6b7280;
-  background: transparent;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.toggle-btn:hover:not(.active) {
-  color: #007bff;
-}
-
-.toggle-btn.active {
-  background: #007bff;
-  color: white;
 }
 
 .achievements-grid {
